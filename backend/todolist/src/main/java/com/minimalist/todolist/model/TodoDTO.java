@@ -24,7 +24,6 @@ public class TodoDTO {
     private Integer index;
     
     @NotBlank
-    @ReadOnlyProperty
     private String listId;
     
     private LocalDateTime createdDate;

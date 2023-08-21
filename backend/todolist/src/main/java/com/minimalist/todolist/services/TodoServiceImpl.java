@@ -16,8 +16,8 @@ public class TodoServiceImpl implements TodoService {
     private final TodoMapper todoMapper;
     
     @Override
-    public Flux<TodoDTO> getAll() {
-        return todoRepository.findAll()
+    public Flux<TodoDTO> getAll(String listId) {
+        return todoRepository.findAllByListIdOrderByIndexAsc(listId)
                 .map(todoMapper::todoToTodoDto);
     }
     

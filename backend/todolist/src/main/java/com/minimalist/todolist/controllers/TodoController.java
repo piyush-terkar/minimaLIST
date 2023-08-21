@@ -15,13 +15,14 @@ public class TodoController {
     public static final String TODO_PATH = "/api/v1/todo";
     public static final String TODO_PATH_ID = TODO_PATH + "/{todoId}";
     
-    @GetMapping(TODO_PATH)
-    Flux<TodoDTO> listTodos(){
-        return todoService.getAll();
+    @GetMapping(TODO_PATH + "/{listId}")
+    Flux<TodoDTO> listTodos(@PathVariable("listId") String listId){
+        return todoService.getAll(listId);
     }
     
     @PostMapping(TODO_PATH)
     Mono<TodoDTO> createTodo(@RequestBody TodoDTO dto){
+        
         return todoService.create(dto);
     }
     

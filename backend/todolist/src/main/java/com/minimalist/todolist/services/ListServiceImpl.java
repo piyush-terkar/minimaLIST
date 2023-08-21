@@ -4,6 +4,7 @@ import com.minimalist.todolist.mappers.ListMapper;
 import com.minimalist.todolist.model.ListDTO;
 import com.minimalist.todolist.repositories.ListRepository;
 
+import com.minimalist.todolist.repositories.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -15,6 +16,7 @@ public class ListServiceImpl implements ListService {
     
     private final ListRepository listRepository;
     private final ListMapper listMapper;
+    private final TodoRepository todoRepository;
     
     @Override
     public Flux<ListDTO> getAllLists() {
@@ -42,6 +44,7 @@ public class ListServiceImpl implements ListService {
     
     @Override
     public Mono<Void> deleteList(String listId) {
-        return listRepository.deleteById(listId);
+        return todoRepository.deleteByListId(listId)
+                .then(listRepository.deleteById(listId));
     }
 }

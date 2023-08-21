@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface TodoService {
-    Flux<TodoDTO> getAll();
+    Flux<TodoDTO> getAll(String listId);
     
     Mono<TodoDTO> create(TodoDTO todoDto);
     
