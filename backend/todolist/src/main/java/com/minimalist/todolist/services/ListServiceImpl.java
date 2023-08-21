@@ -25,6 +25,12 @@ public class ListServiceImpl implements ListService {
     }
     
     @Override
+    public Mono<ListDTO> getListById(String listId) {
+        return listRepository.findById(listId)
+                .map(listMapper::listToListDTO);
+    }
+    
+    @Override
     public Mono<ListDTO> createList(ListDTO listDTO) {
         return listRepository.save(listMapper.listDtoToList(listDTO))
                 .map(listMapper::listToListDTO);

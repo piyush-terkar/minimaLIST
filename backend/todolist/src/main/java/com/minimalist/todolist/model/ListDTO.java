@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @Builder
 public class ListDTO {
     
-    @NotBlank
-    @Size(min = 1, max = 255)
     private String id;
     
     @NotBlank

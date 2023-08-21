@@ -7,6 +7,8 @@ import reactor.core.publisher.Mono;
 public interface ListService {
     Flux<ListDTO> getAllLists();
     
+    Mono<ListDTO> getListById(String listId);
+    
     Mono<ListDTO> createList(ListDTO listDTO);
     
     Mono<ListDTO> updateList(String listId, ListDTO listDTO);

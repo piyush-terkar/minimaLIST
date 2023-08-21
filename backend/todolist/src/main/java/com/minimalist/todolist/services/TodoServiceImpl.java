@@ -22,6 +22,12 @@ public class TodoServiceImpl implements TodoService {
     }
     
     @Override
+    public Mono<TodoDTO> getTodoById(String todoId) {
+        return todoRepository.findById(todoId)
+                .map(todoMapper::todoToTodoDto);
+    }
+    
+    @Override
     public Mono<TodoDTO> create(TodoDTO todoDto) {
         return todoRepository.save(todoMapper.todoDtoToTodo(todoDto))
                 .map(todoMapper::todoToTodoDto);

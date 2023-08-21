@@ -3,7 +3,10 @@ package com.minimalist.todolist.controllers;
 import com.minimalist.todolist.model.ListDTO;
 import com.minimalist.todolist.services.ListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -18,22 +21,29 @@ public class ListController {
     
     @GetMapping(LIST_PATH)
     Flux<ListDTO> getAll(){
-        return listService.getAllLists();
+        return listService.getAllLists()
+                .switchIfEmpty(
+                        Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT))
+                );
     }
     
     @PostMapping(LIST_PATH)
-    Mono<ListDTO> newList(@RequestBody ListDTO listDTO){
+    Mono<ListDTO> newList(@RequestBody @Validated ListDTO listDTO){
         return listService.createList(listDTO);
     }
     
     @PutMapping(LIST_PATH_ID)
-    Mono<ListDTO> updateList(@PathVariable("listId") String listId, @RequestBody ListDTO listDTO){
-        return listService.updateList(listId, listDTO);
+    Mono<ListDTO> updateList(@PathVariable("listId") String listId,
+                             @RequestBody @Validated ListDTO listDTO){
+        return listService.updateList(listId, listDTO)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
     
     @DeleteMapping(LIST_PATH_ID)
     Mono<Void> deleteList(@PathVariable("listId") String listId){
-        return listService.deleteList(listId);
+        return listService.getListById(listId)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .flatMap(foundList -> listService.deleteList(foundList.getId()));
     }
     
 }
