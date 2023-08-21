@@ -26,6 +26,8 @@ public class ListDTO {
     @Size(min = 1, max = 255)
     private String title;
     
+    private Integer index;
+    
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }

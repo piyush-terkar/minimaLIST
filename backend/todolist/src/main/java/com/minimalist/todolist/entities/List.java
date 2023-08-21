@@ -19,6 +19,7 @@ public class List {
     private String id;
     private String emoji;
     private String title;
+    private Integer index;
     
     @CreatedDate
     private LocalDateTime createdDate;
