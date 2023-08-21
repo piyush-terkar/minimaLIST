@@ -5,10 +5,12 @@ import {
   Text,
   TextInput,
   Paper,
+  ActionIcon,
+  Flex,
 } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { IconGripVertical } from "@tabler/icons-react";
+import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import { Form } from "@mantine/form";
 
@@ -89,11 +91,22 @@ export function DndListHandle({ data }) {
                   setEdit("");
                 }}
               >
-                <TextInput
-                  name={item.id}
-                  value={item.label}
-                  display={edit == item.id ? "" : "none"}
-                />
+                <Flex>
+                  <TextInput
+                    name={item.id}
+                    value={item.label}
+                    display={edit == item.id ? "" : "none"}
+                    m={"sm"}
+                    variant={"unstyled"}
+                  />
+                  <ActionIcon
+                    m={"sm"}
+                    color="red"
+                    display={edit == item.id ? "" : "none"}
+                  >
+                    <IconTrash size="1.125rem" />
+                  </ActionIcon>
+                </Flex>
               </form>
             </div>
           </div>

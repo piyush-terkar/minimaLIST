@@ -10,10 +10,11 @@ import {
   Loader,
   Center,
   Container,
+  ActionIcon,
 } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { IconGripVertical } from "@tabler/icons-react";
+import { IconGripVertical, IconTrash } from "@tabler/icons-react";
 import { RTE } from "../TextEditors/RTE";
 import { useEffect, useState } from "react";
 
@@ -92,6 +93,13 @@ export function DndTodoHandle({ data }) {
                 <RTE content={item.label} />
               </Container>
             </Flex>
+            <ActionIcon
+              m={"sm"}
+              color="red"
+              display={selection == item.id ? "" : "none"}
+            >
+              <IconTrash size="1.125rem" />
+            </ActionIcon>
           </div>
         )}
       </Draggable>
