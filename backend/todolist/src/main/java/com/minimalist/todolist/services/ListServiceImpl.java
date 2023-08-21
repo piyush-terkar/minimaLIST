@@ -3,6 +3,7 @@ package com.minimalist.todolist.services;
 import com.minimalist.todolist.mappers.ListMapper;
 import com.minimalist.todolist.model.ListDTO;
 import com.minimalist.todolist.repositories.ListRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -12,8 +13,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ListServiceImpl implements ListService {
     
-    private ListMapper listMapper;
-    private ListRepository listRepository;
+    private final ListRepository listRepository;
+    private final ListMapper listMapper;
     
     @Override
     public Flux<ListDTO> getAllLists() {
@@ -22,9 +23,8 @@ public class ListServiceImpl implements ListService {
     }
     
     @Override
-    public Mono<ListDTO> createList(Mono<ListDTO> listDTO) {
-        return listDTO.map(listMapper::listDtoToList)
-                .flatMap(listRepository::save)
+    public Mono<ListDTO> createList(ListDTO listDTO) {
+        return listRepository.save(listMapper.listDtoToList(listDTO))
                 .map(listMapper::listToListDTO);
     }
     
