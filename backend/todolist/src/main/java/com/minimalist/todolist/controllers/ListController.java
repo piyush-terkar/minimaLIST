@@ -3,9 +3,7 @@ package com.minimalist.todolist.controllers;
 import com.minimalist.todolist.model.ListDTO;
 import com.minimalist.todolist.services.ListService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -24,8 +22,18 @@ public class ListController {
     }
     
     @PostMapping(LIST_PATH)
-    Mono<ListDTO> newList(ListDTO listDTO){
+    Mono<ListDTO> newList(@RequestBody ListDTO listDTO){
         return listService.createList(listDTO);
+    }
+    
+    @PutMapping(LIST_PATH_ID)
+    Mono<ListDTO> updateList(@PathVariable("listId") String listId, @RequestBody ListDTO listDTO){
+        return listService.updateList(listId, listDTO);
+    }
+    
+    @DeleteMapping(LIST_PATH_ID)
+    Mono<Void> deleteList(@PathVariable("listId") String listId){
+        return listService.deleteList(listId);
     }
     
 }

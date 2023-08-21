@@ -1,10 +1,11 @@
 package com.minimalist.todolist.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
@@ -12,11 +13,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
 public class ListDTO {
     
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String id;
+    
+    @NotBlank
+    @Size(min = 1, max = 2)
     private String emoji;
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String title;
     
     private LocalDateTime createdDate;
