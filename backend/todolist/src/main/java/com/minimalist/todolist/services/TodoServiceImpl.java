@@ -32,7 +32,7 @@ public class TodoServiceImpl implements TodoService {
         return todoRepository.findById(todoId)
                 .map(foundTodo -> {
                     foundTodo.setIsChecked(todoDto.getIsChecked());
-                    foundTodo.setIsChecked(todoDto.getIsChecked());
+                    foundTodo.setIndex(todoDto.getIndex());
                     foundTodo.setContent(todoDto.getContent());
                     return foundTodo;
                 }).flatMap(todoRepository::save)
