@@ -1,6 +1,9 @@
 import { DndTodoHandle } from "../DragNDrops/DndTodoHandle";
 import { Affix, Center, Flex, Paper } from "@mantine/core";
 import { RTE } from "../TextEditors/RTE";
+import { TodoHeroHeader } from "./TodoHeroHeader";
+import axios from "axios";
+import { useEffect, useState } from "react";
 const data = [
   { emoji: "👍", label: "Sales", id: "a" },
   { emoji: "🚚", label: "Deliveries", id: "b" },
@@ -17,8 +20,21 @@ const data = [
 ];
 
 export function TodoRenderer() {
+  const [list, setList] = useState(undefined);
+
+  const getlist = (listId) => {
+    axios
+      .get(`http://localhost:8080/api/v1/list/${listId}`)
+      .then((response) => {
+        setList(response.data);
+      });
+  };
+  useEffect(() => {
+    getlist("64e44c581919502d3b5bb902");
+  });
   return (
     <>
+      {list ? <TodoHeroHeader title={list.title} emoji={list.emoji} /> : null}
       <Paper shadow="xl" radius="xs" p="xs">
         <DndTodoHandle data={data} />
       </Paper>
