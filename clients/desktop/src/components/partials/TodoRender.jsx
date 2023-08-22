@@ -4,6 +4,7 @@ import { RTE } from "../TextEditors/RTE";
 import { TodoHeroHeader } from "./TodoHeroHeader";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import NewTodoCreator from "../creators/NewTodoCreator";
 const data = [
   { isChecked: "👍", content: "Sales", id: "a" },
   { isChecked: "🚚", content: "Deliveries", id: "b" },
@@ -36,7 +37,14 @@ export function TodoRenderer({ selectedList }) {
     <>
       {list ? <TodoHeroHeader title={list.title} emoji={list.emoji} /> : null}
       <Paper shadow="xl" radius="xs" p="xs">
-        {todos ? <DndTodoHandle data={todos} /> : null}
+        {todos ? (
+          <>
+            <NewTodoCreator />
+            <DndTodoHandle data={todos} />
+          </>
+        ) : (
+          <NewTodoCreator />
+        )}
       </Paper>
     </>
   );

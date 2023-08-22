@@ -66,125 +66,64 @@ const useStyles = createStyles((theme) => ({
 
 export function DndTodoHandle({ data }) {
   const { classes, cx } = useStyles();
-  const [state, handlers] = useListState(data);
   const [selection, setSelection] = useState();
-  const [newForm, setNewForm] = useState(false);
+  const [state, handlers] = useListState(data);
+  console.log(data, state);
+  const items = state.map((item, index) => (
+    <Draggable index={index} draggableId={index.toString()} key={index}>
+      {(provided, snapshot) => (
+        <div
+          className={cx(classes.item, {
+            [classes.itemDragging]: snapshot.isDragging,
+          })}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+        >
+          <div {...provided.dragHandleProps} className={classes.dragHandle}>
+            <IconGripVertical size="1.05rem" stroke={1.5} />
+          </div>
 
-  if (data) {
-    const items = state.map((item, index) => (
-      <Draggable index={index} draggableId={index.toString()} key={index}>
-        {(provided, snapshot) => (
-          <div
-            className={cx(classes.item, {
-              [classes.itemDragging]: snapshot.isDragging,
-            })}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-          >
-            <div {...provided.dragHandleProps} className={classes.dragHandle}>
-              <IconGripVertical size="1.05rem" stroke={1.5} />
-            </div>
-
-            <Flex justify={"space-between"}>
-              <Checkbox m={"sm"} name={index} />
-              <Text
-                m={"sm"}
-                onClick={() => {
-                  setSelection(item.id);
-                }}
-                display={selection == item.id ? "none" : ""}
-              >
-                {item.label}
-              </Text>
-              <Container display={selection != item.id ? "none" : ""}>
-                <RTE content={item.label} />
-              </Container>
-            </Flex>
-            <ActionIcon
+          <Flex justify={"space-between"}>
+            <Checkbox m={"sm"} name={index} defaultChecked={item.isChecked} />
+            <Text
               m={"sm"}
-              color="red"
-              display={selection == item.id ? "" : "none"}
+              onClick={() => {
+                setSelection(item.id);
+              }}
+              display={selection == item.id ? "none" : ""}
             >
-              <IconTrash size="1.125rem" />
-            </ActionIcon>
+              {item.label}
+            </Text>
+            <Container display={selection != item.id ? "none" : ""}>
+              <RTE content={item.content} />
+            </Container>
+          </Flex>
+          <ActionIcon
+            m={"sm"}
+            color="red"
+            display={selection == item.id ? "" : "none"}
+          >
+            <IconTrash size="1.125rem" />
+          </ActionIcon>
+        </div>
+      )}
+    </Draggable>
+  ));
+
+  return (
+    <DragDropContext
+      onDragEnd={({ destination, source }) =>
+        handlers.reorder({ from: source.index, to: destination?.index || 0 })
+      }
+    >
+      <Droppable droppableId="dnd-list" direction="vertical">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {items}
+            {provided.placeholder}
           </div>
         )}
-      </Draggable>
-    ));
-
-    return (
-      <DragDropContext
-        onDragEnd={({ destination, source }) =>
-          handlers.reorder({ from: source.index, to: destination?.index || 0 })
-        }
-      >
-        <Droppable droppableId="dnd-list" direction="vertical">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {items}
-              <Paper
-                className={classes.item}
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                onClick={() => setNewForm(true)}
-                display={!newForm ? "" : "none"}
-              >
-                <div
-                  {...provided.dragHandleProps}
-                  className={classes.dragHandle}
-                >
-                  <IconGripVertical size="1.05rem" stroke={1.5} />
-                </div>
-                <ActionIcon variant={"subtle"}>
-                  <IconPlus />
-                </ActionIcon>
-                <Text m={"md"} color="gray">
-                  Click To Add New To-Do.
-                </Text>
-              </Paper>
-              {newForm ? (
-                <Flex>
-                  <ActionIcon m={"md"} onClick={() => setNewForm(false)}>
-                    <IconX />
-                  </ActionIcon>
-                  <ActionIcon m={"md"} variant={"filled"}>
-                    <IconCheck />
-                  </ActionIcon>
-                  <Paper>
-                    <RTE />
-                  </Paper>
-                </Flex>
-              ) : null}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-    );
-  }
-  return (
-    <>
-      <Center>
-        <Loader size={"xl"} color={"gray"} />
-      </Center>
-      <Skeleton height={50} circle mb="xl" />
-      <Paper m={"sm"}>
-        <Skeleton height={8} radius="xl" />
-        <Skeleton height={8} mt={6} radius="xl" />
-        <Skeleton height={8} mt={6} width="70%" radius="xl" />
-      </Paper>
-      <Skeleton height={50} circle mb="xl" />
-      <Paper m={"sm"}>
-        <Skeleton height={8} radius="xl" />
-        <Skeleton height={8} mt={6} radius="xl" />
-        <Skeleton height={8} mt={6} width="70%" radius="xl" />
-      </Paper>
-      <Skeleton height={50} circle mb="xl" />
-      <Paper m={"sm"}>
-        <Skeleton height={8} radius="xl" />
-        <Skeleton height={8} mt={6} radius="xl" />
-        <Skeleton height={8} mt={6} width="70%" radius="xl" />
-      </Paper>
-    </>
+      </Droppable>
+    </DragDropContext>
   );
 }
