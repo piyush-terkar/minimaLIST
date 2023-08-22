@@ -66,7 +66,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function DndListHandle({ data, onChange, setList }) {
+export function DndListHandle({ data, onChange, setList, currList }) {
   const { classes, cx } = useStyles();
   const [edit, setEdit] = useState("");
   const [state, handlers] = useListState(data);
@@ -100,6 +100,9 @@ export function DndListHandle({ data, onChange, setList }) {
   };
 
   const listDelete = (id) => {
+    if (id == currList.id) {
+      setList(undefined);
+    }
     axios.delete(`http://localhost:8080/api/v1/list/${id}`).then((response) => {
       onChange();
     });

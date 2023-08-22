@@ -1,15 +1,32 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { MantineProvider } from "@mantine/core";
+import { useState } from "react";
+import {
+  MantineProvider,
+  ColorSchemeProvider,
+  ColorScheme,
+} from "@mantine/core";
 import { Shell } from "./components/partials/AppShell";
 import { Authentication } from "./components/pages/Authentication";
 
 function App() {
+  const [colorScheme, setColorScheme] = useState("light");
+  const toggleColorScheme = (value) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <Shell />
-      {/* <Authentication /> */}
-    </MantineProvider>
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
+    >
+      <MantineProvider
+        theme={{ colorScheme }}
+        withGlobalStyles
+        withNormalizeCSS
+      >
+        <Shell />
+        {/* <Authentication /> */}
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
 

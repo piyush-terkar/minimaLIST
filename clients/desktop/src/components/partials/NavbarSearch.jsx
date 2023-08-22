@@ -140,7 +140,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function NavbarSearch({ opened, setList }) {
+export function NavbarSearch({ opened, setList, selectedlist }) {
   const { classes } = useStyles();
 
   const [lists, setLists] = useState(undefined);
@@ -190,6 +190,7 @@ export function NavbarSearch({ opened, setList }) {
                 getLists();
               }}
               setList={setList}
+              currList={selectedlist}
             />
           </>
         ) : (

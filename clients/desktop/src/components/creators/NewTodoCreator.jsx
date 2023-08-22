@@ -56,11 +56,9 @@ export default function NewTodoCreator() {
           <ActionIcon m={"md"} onClick={() => setNewForm(false)}>
             <IconX />
           </ActionIcon>
-          <ActionIcon m={"md"} variant={"filled"}>
-            <IconCheck />
-          </ActionIcon>
+
           <Paper>
-            <RTE />
+            <RTE content={""} onChange={console.log} />
           </Paper>
         </Flex>
       </Paper>

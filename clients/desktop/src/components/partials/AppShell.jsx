@@ -33,7 +33,13 @@ export function Shell() {
       }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
-      navbar={<NavbarSearch opened={opened} setList={setSelectedList} />}
+      navbar={
+        <NavbarSearch
+          opened={opened}
+          setList={setSelectedList}
+          selectedlist={selectedList}
+        />
+      }
       footer={<FooterPlain />}
       header={<HeaderMenu theme={theme} setOpened={setOpened} />}
     >
