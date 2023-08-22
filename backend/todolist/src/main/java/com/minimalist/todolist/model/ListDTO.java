@@ -18,7 +18,7 @@ public class ListDTO {
     private String id;
     
     @NotBlank
-    @Size(min = 1, max = 2)
+    @Size(min = 0, max = 255)
     private String emoji;
     @NotBlank
     @Size(min = 1, max = 255)

@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class ListController {
     
     private static final String LIST_PATH = "/api/v1/list";
@@ -25,6 +26,11 @@ public class ListController {
                 .switchIfEmpty(
                         Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT))
                 );
+    }
+    
+    @GetMapping(LIST_PATH_ID)
+    Mono<ListDTO> getListByID(@PathVariable("listId") String listId){
+        return listService.getListById(listId);
     }
     
     @PostMapping(LIST_PATH)
