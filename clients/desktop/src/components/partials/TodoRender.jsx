@@ -19,19 +19,20 @@ const data = [
   { emoji: "💁‍♀️", label: "Customers", id: "i" },
 ];
 
-export function TodoRenderer() {
+export function TodoRenderer({ listId }) {
   const [list, setList] = useState(undefined);
 
   const getlist = (listId) => {
     axios
       .get(`http://localhost:8080/api/v1/list/${listId}`)
       .then((response) => {
+        console.log(response);
         setList(response.data);
       });
   };
   useEffect(() => {
-    getlist("64e44c581919502d3b5bb902");
-  });
+    getlist(listId);
+  }, [listId]);
   return (
     <>
       {list ? <TodoHeroHeader title={list.title} emoji={list.emoji} /> : null}

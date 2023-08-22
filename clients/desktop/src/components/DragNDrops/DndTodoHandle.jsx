@@ -14,7 +14,13 @@ import {
 } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { IconGripVertical, IconTrash } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconGripVertical,
+  IconPlus,
+  IconTrash,
+  IconX,
+} from "@tabler/icons-react";
 import { RTE } from "../TextEditors/RTE";
 import { useEffect, useState } from "react";
 
@@ -62,6 +68,7 @@ export function DndTodoHandle({ data }) {
   const { classes, cx } = useStyles();
   const [state, handlers] = useListState(data);
   const [selection, setSelection] = useState();
+  const [newForm, setNewForm] = useState(false);
 
   if (data) {
     const items = state.map((item, index) => (
@@ -115,6 +122,39 @@ export function DndTodoHandle({ data }) {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {items}
+              <Paper
+                className={classes.item}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                onClick={() => setNewForm(true)}
+                display={!newForm ? "" : "none"}
+              >
+                <div
+                  {...provided.dragHandleProps}
+                  className={classes.dragHandle}
+                >
+                  <IconGripVertical size="1.05rem" stroke={1.5} />
+                </div>
+                <ActionIcon variant={"subtle"}>
+                  <IconPlus />
+                </ActionIcon>
+                <Text m={"md"} color="gray">
+                  Click To Add New To-Do.
+                </Text>
+              </Paper>
+              {newForm ? (
+                <Flex>
+                  <ActionIcon m={"md"} onClick={() => setNewForm(false)}>
+                    <IconX />
+                  </ActionIcon>
+                  <ActionIcon m={"md"} variant={"filled"}>
+                    <IconCheck />
+                  </ActionIcon>
+                  <Paper>
+                    <RTE />
+                  </Paper>
+                </Flex>
+              ) : null}
               {provided.placeholder}
             </div>
           )}

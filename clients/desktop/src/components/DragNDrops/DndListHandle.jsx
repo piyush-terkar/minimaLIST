@@ -66,7 +66,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function DndListHandle({ data, onChange }) {
+export function DndListHandle({ data, onChange, setList }) {
   const { classes, cx } = useStyles();
   const [edit, setEdit] = useState("");
   const [state, handlers] = useListState(data);
@@ -122,6 +122,7 @@ export function DndListHandle({ data, onChange }) {
               [classes.itemDragging]: snapshot.isDragging,
             })}
             ref={provided.innerRef}
+            onClick={() => setList(item.id)}
             {...provided.draggableProps}
           >
             <div {...provided.dragHandleProps} className={classes.dragHandle}>

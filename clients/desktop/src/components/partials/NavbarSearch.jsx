@@ -141,7 +141,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function NavbarSearch({ opened }) {
+export function NavbarSearch({ opened, setList }) {
   const { classes } = useStyles();
 
   const [lists, setLists] = useState(undefined);
@@ -188,6 +188,7 @@ export function NavbarSearch({ opened }) {
             onChange={() => {
               getLists();
             }}
+            setList={setList}
           />
         ) : null}
       </Navbar.Section>

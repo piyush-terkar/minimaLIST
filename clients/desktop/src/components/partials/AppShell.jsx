@@ -20,6 +20,8 @@ import { FooterPlain } from "./FooterPlain";
 export function Shell() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const [selectedList, setSelectedList] = useState(undefined);
+  console.log(selectedList);
   return (
     <AppShell
       styles={{
@@ -32,11 +34,11 @@ export function Shell() {
       }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
-      navbar={<NavbarSearch opened={opened} />}
+      navbar={<NavbarSearch opened={opened} setList={setSelectedList} />}
       footer={<FooterPlain />}
       header={<HeaderMenu theme={theme} setOpened={setOpened} />}
     >
-      <TodoRenderer />
+      {selectedList ? <TodoRenderer listId={selectedList} /> : null}
     </AppShell>
   );
 }
