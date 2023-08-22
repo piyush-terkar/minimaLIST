@@ -24,6 +24,7 @@ export function TodoRenderer({ selectedList }) {
   const [list, setList] = useState(selectedList);
   const [todos, setTodos] = useState(undefined);
   const getTodos = (listId) => {
+    setTodos(undefined);
     axios.get(`http://localhost:8080/api/v1/todo/${listId}`).then((res) => {
       setTodos(res.data);
     });
@@ -40,7 +41,7 @@ export function TodoRenderer({ selectedList }) {
         {todos ? (
           <>
             <NewTodoCreator />
-            <DndTodoHandle data={todos} />
+            <DndTodoHandle data={todos} onChange={getTodos} />
           </>
         ) : (
           <NewTodoCreator />

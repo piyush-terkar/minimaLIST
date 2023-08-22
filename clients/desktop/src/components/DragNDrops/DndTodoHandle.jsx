@@ -23,6 +23,7 @@ import {
 } from "@tabler/icons-react";
 import { RTE } from "../TextEditors/RTE";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -64,11 +65,17 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function DndTodoHandle({ data }) {
+export function DndTodoHandle({ data, onChange }) {
   const { classes, cx } = useStyles();
   const [selection, setSelection] = useState();
   const [state, handlers] = useListState(data);
-  console.log(data, state);
+
+  const deleteTodo = (todo) => {
+    axios.delete(`http://localhost:8080/api/v1/todo/${todo.id}`).then((res) => {
+      onChange(todo.listId);
+    });
+  };
+
   const items = state.map((item, index) => (
     <Draggable index={index} draggableId={index.toString()} key={index}>
       {(provided, snapshot) => (
@@ -92,7 +99,7 @@ export function DndTodoHandle({ data }) {
               }}
               display={selection == item.id ? "none" : ""}
             >
-              {item.label}
+              {item.content}
             </Text>
             <Container display={selection != item.id ? "none" : ""}>
               <RTE content={item.content} />
@@ -102,6 +109,7 @@ export function DndTodoHandle({ data }) {
             m={"sm"}
             color="red"
             display={selection == item.id ? "" : "none"}
+            onClick={() => deleteTodo(item)}
           >
             <IconTrash size="1.125rem" />
           </ActionIcon>
