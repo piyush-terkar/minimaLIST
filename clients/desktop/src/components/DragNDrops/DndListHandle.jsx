@@ -105,14 +105,6 @@ export function DndListHandle({ data, onChange, setList }) {
     });
   };
 
-  const createList = () => {
-    axios
-      .post("http://localhost:8080/api/v1/list", { ...newList, emoji: emoji })
-      .then((response) => {
-        onChange();
-      });
-  };
-
   const items = state.map((item, index) => (
     <Draggable index={index} draggableId={index.toString()} key={index}>
       {(provided, snapshot) => (
@@ -122,7 +114,7 @@ export function DndListHandle({ data, onChange, setList }) {
               [classes.itemDragging]: snapshot.isDragging,
             })}
             ref={provided.innerRef}
-            onClick={() => setList(item.id)}
+            onClick={() => setList(item)}
             {...provided.draggableProps}
           >
             <div {...provided.dragHandleProps} className={classes.dragHandle}>
@@ -215,76 +207,6 @@ export function DndListHandle({ data, onChange, setList }) {
       <Droppable droppableId="dnd-list" direction="vertical">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            <Paper
-              className={classes.item}
-              onClick={() => setShowForm(true)}
-              display={!showForm ? "" : "none"}
-            >
-              <ActionIcon>
-                <IconPlus stroke={1.5} />
-              </ActionIcon>
-              <Text m={"sm"} color={"gray"}>
-                Click To Add New List
-              </Text>
-            </Paper>
-            <Container display={showForm ? "" : "none"}>
-              <Paper className={classes.item}>
-                <ActionIcon
-                  onClick={() => {
-                    setFormEmoji(false);
-                    setShowForm(false);
-                    setEmoji("");
-                  }}
-                >
-                  <IconX />
-                </ActionIcon>
-                {emoji ? (
-                  <Emoji
-                    unified={emoji}
-                    emojiStyle={EmojiStyle.APPLE}
-                    size={40}
-                  />
-                ) : null}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    createList();
-                  }}
-                >
-                  <Text color={"gray"}>
-                    Press <Kbd>Enter</Kbd> to create
-                  </Text>
-                  <Flex>
-                    <TextInput
-                      m={"sm"}
-                      placeholder="List Title"
-                      name="title"
-                      value={newList.title}
-                      onChange={(e) =>
-                        setNewList({ ...newList, title: e.target.value })
-                      }
-                    />
-                    <Button
-                      onClick={() =>
-                        setFormEmoji(formEmoji === "new" ? "" : "new")
-                      }
-                      m={"sm"}
-                      pr={0}
-                      variant={"outline"}
-                      color={"gray"}
-                      leftIcon={<IconMoodSmile m={0} />}
-                    />
-                  </Flex>
-                </form>
-              </Paper>
-              <Paper display={formEmoji === "new" ? "" : "none"}>
-                <EmojiPicker
-                  onEmojiClick={(emojiData, event) => {
-                    setEmoji(emojiData.unified);
-                  }}
-                />
-              </Paper>
-            </Container>
             {items}
             {provided.placeholder}
           </div>

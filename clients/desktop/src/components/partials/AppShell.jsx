@@ -21,7 +21,6 @@ export function Shell() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [selectedList, setSelectedList] = useState(undefined);
-  console.log(selectedList);
   return (
     <AppShell
       styles={{
@@ -38,7 +37,7 @@ export function Shell() {
       footer={<FooterPlain />}
       header={<HeaderMenu theme={theme} setOpened={setOpened} />}
     >
-      {selectedList ? <TodoRenderer listId={selectedList} /> : null}
+      {selectedList ? <TodoRenderer selectedList={selectedList} /> : null}
     </AppShell>
   );
 }

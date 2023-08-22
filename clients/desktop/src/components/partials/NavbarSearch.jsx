@@ -23,9 +23,8 @@ import {
 import { UserButton } from "../buttons/UserButton";
 import { DndListHandle } from "../DragNDrops/DndListHandle";
 import { useEffect, useState } from "react";
-
-import axios from "../../axiosConfig";
-
+import axios from "axios";
+import NewListCreator from "../creators/NewListCreator";
 const useStyles = createStyles((theme) => ({
   navbar: {
     paddingTop: 0,
@@ -183,14 +182,19 @@ export function NavbarSearch({ opened, setList }) {
       </Group>
       <Navbar.Section className={classes.section} grow component={ScrollArea}>
         {lists ? (
-          <DndListHandle
-            data={lists}
-            onChange={() => {
-              getLists();
-            }}
-            setList={setList}
-          />
-        ) : null}
+          <>
+            <NewListCreator onChange={getLists} />
+            <DndListHandle
+              data={lists}
+              onChange={() => {
+                getLists();
+              }}
+              setList={setList}
+            />
+          </>
+        ) : (
+          <NewListCreator onChange={getLists} />
+        )}
       </Navbar.Section>
       <Navbar.Section className={classes.section}>
         <UserButton

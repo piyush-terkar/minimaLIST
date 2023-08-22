@@ -5,39 +5,38 @@ import { TodoHeroHeader } from "./TodoHeroHeader";
 import axios from "axios";
 import { useEffect, useState } from "react";
 const data = [
-  { emoji: "👍", label: "Sales", id: "a" },
-  { emoji: "🚚", label: "Deliveries", id: "b" },
-  { emoji: "💸", label: "Discounts", id: "c" },
-  { emoji: "💰", label: "Profits", id: "d" },
-  { emoji: "✨", label: "Reports", id: "e" },
-  { emoji: "🛒", label: "Orders", id: "f" },
-  { emoji: "📅", label: "Events", id: "g" },
-  { emoji: "🙈", label: "Debts", id: "h" },
-  { emoji: "💁‍♀️", label: "Customers", id: "i" },
-  { emoji: "📅", label: "Events", id: "j" },
-  { emoji: "🙈", label: "Debts", id: "k" },
-  { emoji: "💁‍♀️", label: "Customers", id: "i" },
+  { isChecked: "👍", content: "Sales", id: "a" },
+  { isChecked: "🚚", content: "Deliveries", id: "b" },
+  { isChecked: "💸", content: "Discounts", id: "c" },
+  { isChecked: "💰", content: "Profits", id: "d" },
+  { isChecked: "✨", content: "Reports", id: "e" },
+  { isChecked: "🛒", content: "Orders", id: "f" },
+  { isChecked: "📅", content: "Events", id: "g" },
+  { isChecked: "🙈", content: "Debts", id: "h" },
+  { isChecked: "💁‍♀️", content: "Customers", id: "i" },
+  { isChecked: "📅", content: "Events", id: "j" },
+  { isChecked: "🙈", content: "Debts", id: "k" },
+  { isChecked: "💁‍♀️", content: "Customers", id: "i" },
 ];
 
-export function TodoRenderer({ listId }) {
-  const [list, setList] = useState(undefined);
-
-  const getlist = (listId) => {
-    axios
-      .get(`http://localhost:8080/api/v1/list/${listId}`)
-      .then((response) => {
-        console.log(response);
-        setList(response.data);
-      });
+export function TodoRenderer({ selectedList }) {
+  const [list, setList] = useState(selectedList);
+  const [todos, setTodos] = useState(undefined);
+  const getTodos = (listId) => {
+    axios.get(`http://localhost:8080/api/v1/todo/${listId}`).then((res) => {
+      setTodos(res.data);
+    });
   };
+
   useEffect(() => {
-    getlist(listId);
-  }, [listId]);
+    setList(selectedList);
+    getTodos(selectedList.id);
+  }, [selectedList]);
   return (
     <>
       {list ? <TodoHeroHeader title={list.title} emoji={list.emoji} /> : null}
       <Paper shadow="xl" radius="xs" p="xs">
-        <DndTodoHandle data={data} />
+        {todos ? <DndTodoHandle data={todos} /> : null}
       </Paper>
     </>
   );
