@@ -22,6 +22,10 @@ import {
 } from "@tabler/icons-react";
 import { UserButton } from "../buttons/UserButton";
 import { DndListHandle } from "../DragNDrops/DndListHandle";
+import { useEffect, useState } from "react";
+
+import axios from "../../axiosConfig";
+
 const useStyles = createStyles((theme) => ({
   navbar: {
     paddingTop: 0,
@@ -137,26 +141,22 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const links = [
-  { icon: IconBulb, label: "Activity", notifications: 3 },
-  { icon: IconCheckbox, label: "Tasks", notifications: 4 },
-  { icon: IconUser, label: "Contacts" },
-];
-
-const lists = [
-  { emoji: "👍", label: "Sales", id: "a" },
-  { emoji: "🚚", label: "Deliveries", id: "b" },
-  { emoji: "💸", label: "Discounts", id: "c" },
-  { emoji: "💰", label: "Profits", id: "d" },
-  { emoji: "✨", label: "Reports", id: "e" },
-  { emoji: "🛒", label: "Orders", id: "f" },
-  { emoji: "📅", label: "Events", id: "g" },
-  { emoji: "🙈", label: "Debts", id: "h" },
-  { emoji: "💁‍♀️", label: "Customers", id: "i" },
-];
-
 export function NavbarSearch({ opened }) {
   const { classes } = useStyles();
+
+  const [lists, setLists] = useState(undefined);
+
+  const getLists = () => {
+    setLists(undefined);
+    axios.get("http://localhost:8080/api/v1/list").then((response) => {
+      console.log(response);
+      setLists(response.data);
+    });
+  };
+
+  useEffect(() => {
+    getLists();
+  }, []);
 
   return (
     <Navbar
@@ -164,7 +164,7 @@ export function NavbarSearch({ opened }) {
       p="md"
       hiddenBreakpoint="sm"
       hidden={!opened}
-      width={{ sm: 200, lg: 300 }}
+      width={{ sm: 350, lg: 450 }}
     >
       <TextInput
         placeholder="Search"
@@ -180,14 +180,16 @@ export function NavbarSearch({ opened }) {
         <Text size="xs" weight={500} color="dimmed">
           Lists
         </Text>
-        <Tooltip label="Create list" withArrow position="right">
-          <ActionIcon variant="default" size={18}>
-            <IconPlus size="0.8rem" stroke={1.5} />
-          </ActionIcon>
-        </Tooltip>
       </Group>
       <Navbar.Section className={classes.section} grow component={ScrollArea}>
-        <DndListHandle data={lists} />
+        {lists ? (
+          <DndListHandle
+            data={lists}
+            onChange={() => {
+              getLists();
+            }}
+          />
+        ) : null}
       </Navbar.Section>
       <Navbar.Section className={classes.section}>
         <UserButton
