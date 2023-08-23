@@ -42,6 +42,7 @@ public class ListServiceImpl implements ListService {
                 .map(foundList -> {
                     foundList.setEmoji(listDTO.getEmoji());
                     foundList.setTitle(listDTO.getTitle());
+                    foundList.setIndex(listDTO.getIndex());
                     return foundList;
                 })
                 .flatMap(listRepository::save)
