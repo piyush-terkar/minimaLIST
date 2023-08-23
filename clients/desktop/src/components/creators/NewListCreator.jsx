@@ -41,6 +41,7 @@ export default function NewListCreator({ onChange }) {
       .post("http://localhost:8080/api/v1/list", { ...newList, emoji: emoji })
       .then((response) => {
         setEmoji("");
+        setNewList({ ...newList, title: "" });
         setShowForm(false);
         onChange();
       });

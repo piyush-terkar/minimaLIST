@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import {
   Flex,
   ActionIcon,
@@ -6,6 +6,8 @@ import {
   createStyles,
   rem,
   Text,
+  Kbd,
+  Button,
 } from "@mantine/core";
 import {
   IconX,
@@ -14,6 +16,8 @@ import {
   IconGripVertical,
 } from "@tabler/icons-react";
 import { RTE } from "../TextEditors/RTE";
+import { useDebouncedValue } from "@mantine/hooks";
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -31,9 +35,26 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function NewTodoCreator() {
+export default function NewTodoCreator({ listId, onChange }) {
   const { classes, cx } = useStyles();
   const [newForm, setNewForm] = useState(false);
+  const [content, setContent] = useState("");
+
+  const createTodo = (content) => {
+    if (content !== "") {
+      axios
+        .post("http://localhost:8080/api/v1/todo", {
+          content: content,
+          isChecked: false,
+          listId: listId,
+        })
+        .then((res) => {
+          setNewForm(false);
+          onChange(listId);
+        });
+    }
+  };
+
   return (
     <>
       <Paper
@@ -52,15 +73,19 @@ export default function NewTodoCreator() {
         </Text>
       </Paper>
       <Paper display={newForm ? "" : "none"}>
-        <Flex>
-          <ActionIcon m={"md"} onClick={() => setNewForm(false)}>
-            <IconX />
-          </ActionIcon>
-
-          <Paper>
-            <RTE content={""} onChange={console.log} />
-          </Paper>
-        </Flex>
+        <ActionIcon
+          m={"md"}
+          onClick={() => setNewForm(false)}
+          display={"inline-flex"}
+        >
+          <IconX />
+        </ActionIcon>
+        <Paper>
+          <RTE content={""} onChange={setContent} />
+          <Button m={"sm"} onClick={() => createTodo(content)}>
+            Create To-Do
+          </Button>
+        </Paper>
       </Paper>
     </>
   );

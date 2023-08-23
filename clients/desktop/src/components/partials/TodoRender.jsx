@@ -5,20 +5,6 @@ import { TodoHeroHeader } from "./TodoHeroHeader";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import NewTodoCreator from "../creators/NewTodoCreator";
-const data = [
-  { isChecked: "👍", content: "Sales", id: "a" },
-  { isChecked: "🚚", content: "Deliveries", id: "b" },
-  { isChecked: "💸", content: "Discounts", id: "c" },
-  { isChecked: "💰", content: "Profits", id: "d" },
-  { isChecked: "✨", content: "Reports", id: "e" },
-  { isChecked: "🛒", content: "Orders", id: "f" },
-  { isChecked: "📅", content: "Events", id: "g" },
-  { isChecked: "🙈", content: "Debts", id: "h" },
-  { isChecked: "💁‍♀️", content: "Customers", id: "i" },
-  { isChecked: "📅", content: "Events", id: "j" },
-  { isChecked: "🙈", content: "Debts", id: "k" },
-  { isChecked: "💁‍♀️", content: "Customers", id: "i" },
-];
 
 export function TodoRenderer({ selectedList }) {
   const [list, setList] = useState(selectedList);
@@ -33,18 +19,18 @@ export function TodoRenderer({ selectedList }) {
   useEffect(() => {
     setList(selectedList);
     getTodos(selectedList.id);
-  }, [selectedList]);
+  }, [selectedList, list]);
   return (
     <>
       {list ? <TodoHeroHeader title={list.title} emoji={list.emoji} /> : null}
       <Paper shadow="xl" radius="xs" p="xs">
         {todos ? (
           <>
-            <NewTodoCreator />
+            <NewTodoCreator listId={selectedList.id} onChange={getTodos} />
             <DndTodoHandle data={todos} onChange={getTodos} />
           </>
         ) : (
-          <NewTodoCreator />
+          <NewTodoCreator listId={selectedList.id} onChange={getTodos} />
         )}
       </Paper>
     </>
