@@ -85,12 +85,8 @@ export function DndListHandle({ data, onChange, setList, currList }) {
   const { classes, cx } = useStyles();
   const [edit, setEdit] = useState("");
   const [state, handlers] = useListState(data);
-
-  const [showForm, setShowForm] = useState(false);
   const [formEmoji, setFormEmoji] = useState("");
   const [emoji, setEmoji] = useState("");
-  const [newList, setNewList] = useState({ title: "", emoji: emoji });
-
   const [currEdit, setCurrEdit] = useState();
   const [debounced] = useDebouncedValue(currEdit, 300);
 
@@ -225,7 +221,7 @@ export function DndListHandle({ data, onChange, setList, currList }) {
         handlers.reorder({ from: source.index, to: destination?.index || 0 });
         handlers.apply((item, index) => {
           console.log({ ...item, index: index });
-          listUpdate(item.id, { ...item, index: index });
+          listUpdate(item.id, { ...item, index: index }, false);
           return { ...item, index: index };
         });
       }}
