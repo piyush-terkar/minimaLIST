@@ -82,7 +82,7 @@ export function DndTodoHandle({ data, onChange }) {
       setCurrTodo({ ...currTodo, content: currEdit });
       updateTodo(currTodo);
     }
-  }, [currEdit]);
+  }, [currEdit, currTodo]);
 
   const items = state.map((item, index) => (
     <Draggable index={item.index} draggableId={item.id} key={item.id}>
