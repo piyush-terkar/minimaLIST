@@ -24,13 +24,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function UserButton({ image, name, email, icon, ...others }) {
+export function UserButton({ name, email, icon, ...others }) {
   const { classes } = useStyles();
 
   return (
     <UnstyledButton className={classes.user} {...others}>
       <Group>
-        <Avatar src={image} radius="xl" />
+        <Avatar radius="xl">{name[0]}</Avatar>
 
         <div style={{ flex: 1 }}>
           <Text size="sm" weight={500}>

@@ -10,7 +10,10 @@ import {
   ActionIcon,
   Tooltip,
   rem,
+  Kbd,
   ScrollArea,
+  Autocomplete,
+  Avatar,
 } from "@mantine/core";
 import {
   IconBulb,
@@ -22,9 +25,10 @@ import {
 } from "@tabler/icons-react";
 import { UserButton } from "../buttons/UserButton";
 import { DndListHandle } from "../DragNDrops/DndListHandle";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import NewListCreator from "../creators/NewListCreator";
+import { useFocusTrap, useHotkeys } from "@mantine/hooks";
 const useStyles = createStyles((theme) => ({
   navbar: {
     paddingTop: 0,
@@ -144,13 +148,22 @@ export function NavbarSearch({ opened, setList, selectedlist }) {
   const { classes } = useStyles();
 
   const [lists, setLists] = useState(undefined);
+  const [data, setData] = useState([]);
+  const focusSearch = useRef(null);
+
+  useHotkeys([["ctrl+K", () => focusSearch.current.focus()]]);
 
   const getLists = () => {
     setLists(undefined);
     axios.get("http://localhost:8080/api/v1/list").then((response) => {
       console.log(response);
       setLists(response.data);
+      setData(response.data.map((item) => ({ value: item.title })));
     });
+  };
+
+  const searchHandler = (value) => {
+    setList(lists.find((lst) => lst.title === value));
   };
 
   useEffect(() => {
@@ -165,12 +178,15 @@ export function NavbarSearch({ opened, setList, selectedlist }) {
       hidden={!opened}
       width={{ sm: 350, lg: 450 }}
     >
-      <TextInput
+      <Autocomplete
+        ref={focusSearch}
         placeholder="Search"
+        data={data}
+        onChange={searchHandler}
         size="xs"
         icon={<IconSearch size="0.8rem" stroke={1.5} />}
         rightSectionWidth={70}
-        rightSection={<Code className={classes.searchCode}>Ctrl + K</Code>}
+        rightSection={<Kbd className={classes.searchCode}>Ctrl + K</Kbd>}
         styles={{ rightSection: { pointerEvents: "none" } }}
         mb="sm"
       />
@@ -199,7 +215,6 @@ export function NavbarSearch({ opened, setList, selectedlist }) {
       </Navbar.Section>
       <Navbar.Section className={classes.section}>
         <UserButton
-          image="https://i.imgur.com/fGxgcDF.png"
           name="Bob Rulebreaker"
           email="Product owner"
           icon={<IconSelector size="0.9rem" stroke={1.5} />}
