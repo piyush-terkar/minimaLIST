@@ -1,18 +1,5 @@
-import {
-  Checkbox,
-  createStyles,
-  rem,
-  Text,
-  Flex,
-  Paper,
-  Skeleton,
-  Space,
-  Loader,
-  Center,
-  Container,
-  ActionIcon,
-} from "@mantine/core";
-import { useListState } from "@mantine/hooks";
+import { Checkbox, createStyles, rem, ActionIcon, Paper } from "@mantine/core";
+import { useDebouncedValue, useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
   IconCheck,
@@ -30,7 +17,7 @@ const useStyles = createStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     borderRadius: theme.radius.md,
-    border: `${rem(1)} solid ${
+    border: `${rem(0)} solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
     }`,
     padding: `${theme.spacing.sm} ${theme.spacing.xl}`,
@@ -66,9 +53,17 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function DndTodoHandle({ data, onChange }) {
+  data.map((item, index) => (item.index = index));
   const { classes, cx } = useStyles();
-  const [selection, setSelection] = useState();
   const [state, handlers] = useListState(data);
+  const [currEdit, setCurrEdit] = useState("");
+  const [debounced] = useDebouncedValue(currEdit, 200);
+  const [currTodo, setCurrTodo] = useState({
+    listId: "",
+    content: "",
+    isChecked: null,
+    index: "",
+  });
 
   const deleteTodo = (todo) => {
     axios.delete(`http://localhost:8080/api/v1/todo/${todo.id}`).then((res) => {
@@ -76,8 +71,24 @@ export function DndTodoHandle({ data, onChange }) {
     });
   };
 
+  const updateTodo = (todo) => {
+    axios
+      .put(`http://localhost:8080/api/v1/todo/${currTodo.id}`, todo)
+      .then((res) => console.log(res));
+  };
+
+  useEffect(() => {
+    if (currTodo.listId !== "") {
+      let body = {
+        ...currTodo,
+        content: debounced,
+      };
+      updateTodo(body);
+    }
+  }, [currTodo, debounced]);
+
   const items = state.map((item, index) => (
-    <Draggable index={index} draggableId={index.toString()} key={index}>
+    <Draggable index={item.index} draggableId={item.id} key={item.id}>
       {(provided, snapshot) => (
         <div
           className={cx(classes.item, {
@@ -90,27 +101,19 @@ export function DndTodoHandle({ data, onChange }) {
             <IconGripVertical size="1.05rem" stroke={1.5} />
           </div>
 
-          <Flex justify={"space-between"}>
-            <Checkbox m={"sm"} name={index} defaultChecked={item.isChecked} />
-            <Text
-              m={"sm"}
-              onClick={() => {
-                setSelection(item.id);
-              }}
-              display={selection == item.id ? "none" : ""}
-            >
-              {item.content}
-            </Text>
-            <Container display={selection != item.id ? "none" : ""}>
-              <RTE content={item.content} />
-            </Container>
-          </Flex>
-          <ActionIcon
+          <Checkbox
             m={"sm"}
-            color="red"
-            display={selection == item.id ? "" : "none"}
-            onClick={() => deleteTodo(item)}
-          >
+            name={index}
+            defaultChecked={item.isChecked}
+            onChange={(e) =>
+              setCurrTodo({ ...item, isChecked: e.currentTarget.checked })
+            }
+          />
+          <Paper onClick={(e) => setCurrTodo({ ...item })}>
+            <RTE content={item.content} onChange={setCurrEdit} />
+          </Paper>
+
+          <ActionIcon m={"sm"} color="red" onClick={() => deleteTodo(item)}>
             <IconTrash size="1.125rem" />
           </ActionIcon>
         </div>
@@ -120,9 +123,10 @@ export function DndTodoHandle({ data, onChange }) {
 
   return (
     <DragDropContext
-      onDragEnd={({ destination, source }) =>
-        handlers.reorder({ from: source.index, to: destination?.index || 0 })
-      }
+      onDragEnd={({ destination, source }) => {
+        handlers.reorder({ from: source.index, to: destination?.index || 0 });
+        handlers.apply((item, index) => ({ ...item, index: index }));
+      }}
     >
       <Droppable droppableId="dnd-list" direction="vertical">
         {(provided) => (

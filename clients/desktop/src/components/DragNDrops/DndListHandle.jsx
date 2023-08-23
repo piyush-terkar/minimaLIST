@@ -104,6 +104,7 @@ export function DndListHandle({ data, onChange, setList, currList }) {
       setList(undefined);
     }
     axios.delete(`http://localhost:8080/api/v1/list/${id}`).then((response) => {
+      setList(undefined);
       onChange();
     });
   };

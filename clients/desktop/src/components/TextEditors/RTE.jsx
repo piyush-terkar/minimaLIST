@@ -8,6 +8,7 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import { IconCheck } from "@tabler/icons-react";
 import { ActionIcon, Flex } from "@mantine/core";
+import { useEffect } from "react";
 
 export function RTE({ content, onChange }) {
   const editor = useEditor({
@@ -24,48 +25,54 @@ export function RTE({ content, onChange }) {
   });
 
   const getContent = () => {
-    return editor.getHTML();
+    if (editor) {
+      return editor.getHTML();
+    }
+    return "";
   };
+
+  onChange(getContent());
+
   return (
-    <Flex>
-      <ActionIcon m={"md"} variant={"filled"} onClick={() => getContent()}>
-        <IconCheck />
-      </ActionIcon>
-      <RichTextEditor editor={editor}>
-        {editor && (
-          <BubbleMenu editor={editor}>
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Bold />
-              <RichTextEditor.Italic />
-              <RichTextEditor.Underline />
-              <RichTextEditor.Strikethrough />
-              <RichTextEditor.ClearFormatting />
-              <RichTextEditor.Highlight />
-              <RichTextEditor.Code />
+    <RichTextEditor
+      editor={editor}
+      sx={{
+        ".tiptap": { width: "40vw" },
+      }}
+    >
+      {editor && (
+        <BubbleMenu editor={editor}>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Bold />
+            <RichTextEditor.Italic />
+            <RichTextEditor.Underline />
+            <RichTextEditor.Strikethrough />
+            <RichTextEditor.ClearFormatting />
+            <RichTextEditor.Highlight />
+            <RichTextEditor.Code />
 
-              <RichTextEditor.H1 />
-              <RichTextEditor.H2 />
-              <RichTextEditor.H3 />
-              <RichTextEditor.H4 />
+            <RichTextEditor.H1 />
+            <RichTextEditor.H2 />
+            <RichTextEditor.H3 />
+            <RichTextEditor.H4 />
 
-              <RichTextEditor.Blockquote />
-              <RichTextEditor.Hr />
-              <RichTextEditor.BulletList />
-              <RichTextEditor.OrderedList />
-              <RichTextEditor.Subscript />
-              <RichTextEditor.Superscript />
-            </RichTextEditor.ControlsGroup>
+            <RichTextEditor.Blockquote />
+            <RichTextEditor.Hr />
+            <RichTextEditor.BulletList />
+            <RichTextEditor.OrderedList />
+            <RichTextEditor.Subscript />
+            <RichTextEditor.Superscript />
+          </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.AlignLeft />
-              <RichTextEditor.AlignCenter />
-              <RichTextEditor.AlignJustify />
-              <RichTextEditor.AlignRight />
-            </RichTextEditor.ControlsGroup>
-          </BubbleMenu>
-        )}
-        <RichTextEditor.Content />
-      </RichTextEditor>
-    </Flex>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.AlignLeft />
+            <RichTextEditor.AlignCenter />
+            <RichTextEditor.AlignJustify />
+            <RichTextEditor.AlignRight />
+          </RichTextEditor.ControlsGroup>
+        </BubbleMenu>
+      )}
+      <RichTextEditor.Content />
+    </RichTextEditor>
   );
 }
