@@ -53,7 +53,12 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function DndTodoHandle({ data, onChange }) {
-  data.map((item, index) => (item.index = index));
+  data.map((item, index) => {
+    if (!item.index) {
+      item.index = index;
+    }
+    return item;
+  });
   const { classes, cx } = useStyles();
   const [state, handlers] = useListState(data);
   const [currEdit, setCurrEdit] = useState("");
@@ -72,19 +77,14 @@ export function DndTodoHandle({ data, onChange }) {
   };
 
   const updateTodo = (todo) => {
+    console.log(todo);
     axios
-      .put(`http://localhost:8080/api/v1/todo/${currTodo.id}`, todo)
+      .put(`http://localhost:8080/api/v1/todo/${todo.id}`, todo)
       .then((res) => console.log(res));
   };
 
   useEffect(() => {
-    if (currTodo.listId !== "") {
-      let body = {
-        ...currTodo,
-        content: debounced,
-      };
-      updateTodo(body);
-    }
+    console.log(debounced);
   }, [currTodo, debounced]);
 
   const items = state.map((item, index) => (
@@ -125,7 +125,10 @@ export function DndTodoHandle({ data, onChange }) {
     <DragDropContext
       onDragEnd={({ destination, source }) => {
         handlers.reorder({ from: source.index, to: destination?.index || 0 });
-        handlers.apply((item, index) => ({ ...item, index: index }));
+        handlers.apply((item, index) => {
+          updateTodo({ ...item, index: index });
+          return { ...item, index: index };
+        });
       }}
     >
       <Droppable droppableId="dnd-list" direction="vertical">

@@ -66,7 +66,22 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+function sort_by_key(array, key) {
+  return array.sort(function (a, b) {
+    var x = a[key];
+    var y = b[key];
+    return x < y ? -1 : x > y ? 1 : 0;
+  });
+}
+
 export function DndListHandle({ data, onChange, setList, currList }) {
+  data.map((item, index) => {
+    if (!item.index) {
+      item.index = index;
+    }
+    return item;
+  });
+  data = sort_by_key(data, "index");
   const { classes, cx } = useStyles();
   const [edit, setEdit] = useState("");
   const [state, handlers] = useListState(data);
@@ -85,8 +100,6 @@ export function DndListHandle({ data, onChange, setList, currList }) {
     }
   }, [debounced]);
 
-  const listReOrder = (id, body) => {};
-
   const listUpdate = (id, body) => {
     let data = { ...body };
     if (emoji != "") {
@@ -95,7 +108,7 @@ export function DndListHandle({ data, onChange, setList, currList }) {
     axios
       .put(`http://localhost:8080/api/v1/list/${id}`, data)
       .then((response) => {
-        onChange();
+        console.log(response);
       });
   };
 
@@ -110,7 +123,7 @@ export function DndListHandle({ data, onChange, setList, currList }) {
   };
 
   const items = state.map((item, index) => (
-    <Draggable index={index} draggableId={index.toString()} key={index}>
+    <Draggable index={item.index} draggableId={item.id} key={item.id}>
       {(provided, snapshot) => (
         <>
           <div
@@ -204,9 +217,14 @@ export function DndListHandle({ data, onChange, setList, currList }) {
 
   return (
     <DragDropContext
-      onDragEnd={({ destination, source }) =>
-        handlers.reorder({ from: source.index, to: destination?.index || 0 })
-      }
+      onDragEnd={({ destination, source }) => {
+        handlers.reorder({ from: source.index, to: destination?.index || 0 });
+        handlers.apply((item, index) => {
+          console.log({ ...item, index: index });
+          listUpdate(item.id, { ...item, index: index });
+          return { ...item, index: index };
+        });
+      }}
     >
       <Droppable droppableId="dnd-list" direction="vertical">
         {(provided) => (
