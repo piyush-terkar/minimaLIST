@@ -76,7 +76,7 @@ function sort_by_key(array, key) {
 
 export function DndListHandle({ data, onChange, setList, currList }) {
   data.map((item, index) => {
-    if (!item.index) {
+    if (item.index == null) {
       item.index = index;
     }
     return item;
@@ -96,11 +96,11 @@ export function DndListHandle({ data, onChange, setList, currList }) {
 
   useEffect(() => {
     if (debounced) {
-      listUpdate(debounced.id, debounced);
+      listUpdate(debounced.id, debounced, true);
     }
   }, [debounced]);
 
-  const listUpdate = (id, body) => {
+  const listUpdate = (id, body, refresh) => {
     let data = { ...body };
     if (emoji != "") {
       data = { ...body, emoji: emoji };
@@ -108,6 +108,10 @@ export function DndListHandle({ data, onChange, setList, currList }) {
     axios
       .put(`http://localhost:8080/api/v1/list/${id}`, data)
       .then((response) => {
+        if (refresh) {
+          onChange();
+          setList(response.data);
+        }
         console.log(response);
       });
   };

@@ -62,13 +62,7 @@ export function DndTodoHandle({ data, onChange }) {
   const { classes, cx } = useStyles();
   const [state, handlers] = useListState(data);
   const [currEdit, setCurrEdit] = useState("");
-  const [debounced] = useDebouncedValue(currEdit, 200);
-  const [currTodo, setCurrTodo] = useState({
-    listId: "",
-    content: "",
-    isChecked: null,
-    index: "",
-  });
+  const [currTodo, setCurrTodo] = useState(undefined);
 
   const deleteTodo = (todo) => {
     axios.delete(`http://localhost:8080/api/v1/todo/${todo.id}`).then((res) => {
@@ -77,15 +71,18 @@ export function DndTodoHandle({ data, onChange }) {
   };
 
   const updateTodo = (todo) => {
-    console.log(todo);
     axios
       .put(`http://localhost:8080/api/v1/todo/${todo.id}`, todo)
       .then((res) => console.log(res));
   };
 
   useEffect(() => {
-    console.log(debounced);
-  }, [currTodo, debounced]);
+    console.log(currTodo);
+    if (currTodo) {
+      setCurrTodo({ ...currTodo, content: currEdit });
+      updateTodo(currTodo);
+    }
+  }, [currEdit]);
 
   const items = state.map((item, index) => (
     <Draggable index={item.index} draggableId={item.id} key={item.id}>

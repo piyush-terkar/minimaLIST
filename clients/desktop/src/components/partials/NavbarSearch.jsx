@@ -163,7 +163,9 @@ export function NavbarSearch({ opened, setList, selectedlist }) {
   };
 
   const searchHandler = (value) => {
-    setList(lists.find((lst) => lst.title === value));
+    if (lists) {
+      setList(lists.find((lst) => lst.title === value));
+    }
   };
 
   useEffect(() => {
