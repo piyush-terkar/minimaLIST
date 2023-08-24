@@ -82,7 +82,7 @@ export function DndTodoHandle({ data, onChange }) {
       setCurrTodo({ ...currTodo, content: currEdit });
       updateTodo(currTodo);
     }
-  }, [currEdit, currTodo]);
+  }, [currEdit]);
 
   const items = state.map((item, index) => (
     <Draggable index={item.index} draggableId={item.id} key={item.id}>
@@ -103,7 +103,7 @@ export function DndTodoHandle({ data, onChange }) {
             name={index}
             defaultChecked={item.isChecked}
             onChange={(e) =>
-              setCurrTodo({ ...item, isChecked: e.currentTarget.checked })
+              updateTodo({ ...item, isChecked: e.currentTarget.checked })
             }
           />
           <Paper onClick={(e) => setCurrTodo({ ...item })}>
