@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +14,7 @@ import java.time.LocalDateTime;
 public class UserDTO {
     
     private String id;
-    private String name;
+    private String userName;
     private String email;
     private String password;
     
