@@ -1,9 +1,13 @@
 package com.Minimalist.AuthServer.services;
 
+import com.Minimalist.AuthServer.entities.User;
 import com.Minimalist.AuthServer.mappers.UserMapper;
 import com.Minimalist.AuthServer.model.UserDTO;
 import com.Minimalist.AuthServer.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -13,6 +17,7 @@ public class UserServiceImpl implements UserService {
     
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    
     
     @Override
     public Mono<UserDTO> register(UserDTO userDTO) {
@@ -47,4 +52,6 @@ public class UserServiceImpl implements UserService {
     public Mono<Void> delete(String userId) {
         return userRepository.deleteById(userId);
     }
+    
+    
 }
