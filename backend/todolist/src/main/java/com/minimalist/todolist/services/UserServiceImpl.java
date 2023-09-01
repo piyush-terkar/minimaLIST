@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public Mono<UserDTO> getDetails(Authentication authentication) {
-        return userRepository.findByEmail(authentication.getName())
+        return userRepository.findByUsername(authentication.getName())
                 .map(user -> {
                     user.setPassword("");
                     return userMapper.userToUserDTO(user);

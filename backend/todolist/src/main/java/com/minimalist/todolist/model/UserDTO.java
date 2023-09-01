@@ -1,5 +1,6 @@
 package com.minimalist.todolist.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 public class UserDTO {
     
+    @NotBlank
     private String id;
+    @NotBlank
     private String username;
+    @NotBlank
     private String email;
     private String password;
     
