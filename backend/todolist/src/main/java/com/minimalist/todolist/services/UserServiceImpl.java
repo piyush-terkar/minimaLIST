@@ -2,6 +2,8 @@ package com.minimalist.todolist.services;
 
 import com.minimalist.todolist.mappers.UserMapper;
 import com.minimalist.todolist.model.UserDTO;
+import com.minimalist.todolist.repositories.ListRepository;
+import com.minimalist.todolist.repositories.TodoRepository;
 import com.minimalist.todolist.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,8 @@ public class UserServiceImpl implements UserService {
     
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ListRepository listRepository;
+    private final TodoRepository todoRepository;
     
     @Override
     public Mono<UserDTO> update(String userId, UserDTO userDTO) {
@@ -29,7 +33,11 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public Mono<Void> delete(String userId) {
-        return userRepository.deleteById(userId);
+        
+        return listRepository.findAllByUserIdOrderByIndexAsc(userId)
+                .map(list -> todoRepository.deleteByListId(list.getId())
+                        .then(listRepository.deleteById(list.getId())))
+                .then(userRepository.deleteById(userId));
     }
     
     @Override

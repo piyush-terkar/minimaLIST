@@ -21,6 +21,8 @@ public class List {
     private String title;
     private Integer index;
     
+    private String userId;
+    
     @CreatedDate
     private LocalDateTime createdDate;
     @LastModifiedDate

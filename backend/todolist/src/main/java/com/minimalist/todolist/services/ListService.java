@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ListService {
-    Flux<ListDTO> getAllLists();
+    Flux<ListDTO> getAllLists(String userId);
     
     Mono<ListDTO> getListById(String listId);
     

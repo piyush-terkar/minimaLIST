@@ -26,6 +26,9 @@ public class ListDTO {
     
     private Integer index;
     
+    @NotBlank
+    private String userId;
+    
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }

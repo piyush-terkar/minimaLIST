@@ -19,8 +19,8 @@ public class ListServiceImpl implements ListService {
     private final TodoRepository todoRepository;
     
     @Override
-    public Flux<ListDTO> getAllLists() {
-        return listRepository.findAll()
+    public Flux<ListDTO> getAllLists(String userId) {
+        return listRepository.findAllByUserIdOrderByIndexAsc(userId)
                 .map(listMapper::listToListDTO);
     }
     

@@ -20,18 +20,18 @@ public class ListController {
     
     private final ListService listService;
     
-    @GetMapping(LIST_PATH)
-    Flux<ListDTO> getAll(){
-        return listService.getAllLists()
+    @GetMapping(LIST_PATH + "/{userId}")
+    Flux<ListDTO> getAll(@PathVariable("userId") String userId){
+        return listService.getAllLists(userId)
                 .switchIfEmpty(
                         Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT))
                 );
     }
     
-    @GetMapping(LIST_PATH_ID)
+    /*@GetMapping(LIST_PATH_ID)
     Mono<ListDTO> getListByID(@PathVariable("listId") String listId){
         return listService.getListById(listId);
-    }
+    }*/
     
     @PostMapping(LIST_PATH)
     Mono<ListDTO> newList(@RequestBody @Validated ListDTO listDTO){
