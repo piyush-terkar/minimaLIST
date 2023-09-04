@@ -11,6 +11,7 @@ import { Authentication } from "./components/pages/Authentication";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./Authentication/ProtectedRoute";
 import { Notifications } from "@mantine/notifications";
+import { User } from "./components/pages/User";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -39,6 +40,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/user" element={<User />} />
           </Routes>
         </BrowserRouter>
       </MantineProvider>

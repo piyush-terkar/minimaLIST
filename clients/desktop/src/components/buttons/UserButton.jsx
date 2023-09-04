@@ -53,7 +53,11 @@ export function UserButton({ name, email, icon, ...others }) {
 
   return (
     <UnstyledButton className={classes.user} {...others}>
-      <Group>
+      <Group
+        onClick={() => {
+          navigate("/user");
+        }}
+      >
         <Avatar radius="xl" color={"blue"}>
           {name[0]}
         </Avatar>
