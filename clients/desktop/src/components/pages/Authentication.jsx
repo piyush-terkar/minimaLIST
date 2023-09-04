@@ -1,6 +1,6 @@
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   TextInput,
@@ -21,6 +21,9 @@ import {
 } from "@mantine/core";
 import { FooterPlain } from "../partials/FooterPlain";
 import { HeaderMenu } from "../partials/HeaderMenu";
+import axios from "../../axiosConfig";
+import { useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 const useStyles = createStyles((theme) => ({
   wrapper: {
     minHeight: rem(500),
@@ -30,13 +33,14 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 export function Authentication(props) {
+  const user = JSON.parse(secureLocalStorage.getItem("user"));
+  const navigate = useNavigate();
   const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
       email: "",
-      name: "",
+      username: "",
       password: "",
-      terms: true,
     },
 
     validate: {
@@ -48,6 +52,38 @@ export function Authentication(props) {
     },
   });
 
+  const handleSubmit = (values, event) => {
+    if (type === "login") {
+      console.log({
+        username: values.email,
+        password: values.password,
+      });
+      axios
+        .post(
+          "/api/auth/login",
+          {
+            username: values.email,
+            password: values.password,
+          },
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        )
+        .then((res) => {
+          secureLocalStorage.setItem("user", JSON.stringify(res.data.id));
+          navigate("/todolist");
+        });
+    } else {
+      axios
+        .post("/api/auth/register", values, {
+          withCredentials: true,
+        })
+        .then((res) => console.log(res));
+    }
+  };
+
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const { classes } = useStyles();
@@ -57,29 +93,33 @@ export function Authentication(props) {
       <Container h={640} mt={200}>
         <Paper radius="md" p="xl" withBorder {...props}>
           <Text size="lg" weight={500}>
-            Welcome to Minimalist, {type} with
+            Welcome to Minimalist
           </Text>
 
-          <Group grow mb="md" mt="md">
+          {/* <Group grow mb="md" mt="md">
             <Button radius="xl">Google</Button>
             <Button radius="xl">Twitter</Button>
-          </Group>
+          </Group> */}
 
           <Divider
-            label="Or continue with email"
+            // label="Or continue with email"
             labelPosition="center"
             my="lg"
           />
 
-          <form onSubmit={form.onSubmit(() => {})}>
+          <form
+            onSubmit={form.onSubmit((values, event) => {
+              handleSubmit(values, event);
+            })}
+          >
             <Stack>
               {type === "register" && (
                 <TextInput
                   label="Name"
                   placeholder="Your name"
-                  value={form.values.name}
+                  value={form.values.username}
                   onChange={(event) =>
-                    form.setFieldValue("name", event.currentTarget.value)
+                    form.setFieldValue("username", event.currentTarget.value)
                   }
                   radius="md"
                 />
