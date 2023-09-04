@@ -10,6 +10,7 @@ import { Shell } from "./components/partials/AppShell";
 import { Authentication } from "./components/pages/Authentication";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./Authentication/ProtectedRoute";
+import { Notifications } from "@mantine/notifications";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -25,6 +26,7 @@ function App() {
         withGlobalStyles
         withNormalizeCSS
       >
+        <Notifications />
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Authentication />} />

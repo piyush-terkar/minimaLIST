@@ -1,3 +1,5 @@
+import { notifications } from "@mantine/notifications";
+import { IconX } from "@tabler/icons-react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 
@@ -15,8 +17,14 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.status === 401) {
       secureLocalStorage.clear();
-      return Promise.reject(error);
     }
+    notifications.show({
+      title: "Something went wrong!",
+      message: error.message,
+      color: "red",
+      icon: <IconX />,
+    });
+    return Promise.reject(error);
   }
 );
 
