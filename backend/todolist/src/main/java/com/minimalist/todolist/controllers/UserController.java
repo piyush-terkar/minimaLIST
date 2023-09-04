@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
     public static final String USER_PATH = "/api/v1/user";
     public static final String USER_PATH_ID = USER_PATH + "/{userId}";
