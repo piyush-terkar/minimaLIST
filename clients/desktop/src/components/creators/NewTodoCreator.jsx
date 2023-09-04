@@ -17,7 +17,7 @@ import {
 } from "@tabler/icons-react";
 import { RTE } from "../TextEditors/RTE";
 import { useDebouncedValue } from "@mantine/hooks";
-import axios from "axios";
+import axios from "../../axiosConfig";
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -43,12 +43,13 @@ export default function NewTodoCreator({ listId, onChange }) {
   const createTodo = (content) => {
     if (content !== "") {
       axios
-        .post("http://localhost:8080/api/v1/todo", {
+        .post("/api/v1/todo", {
           content: content,
           isChecked: false,
           listId: listId,
         })
         .then((res) => {
+          console.log(res);
           setNewForm(false);
           onChange(listId);
         });

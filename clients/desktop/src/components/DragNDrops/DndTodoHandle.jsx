@@ -10,7 +10,7 @@ import {
 } from "@tabler/icons-react";
 import { RTE } from "../TextEditors/RTE";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../axiosConfig";
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -65,15 +65,13 @@ export function DndTodoHandle({ data, onChange }) {
   const [currTodo, setCurrTodo] = useState(undefined);
 
   const deleteTodo = (todo) => {
-    axios.delete(`http://localhost:8080/api/v1/todo/${todo.id}`).then((res) => {
+    axios.delete(`/api/v1/todo/${todo.id}`).then((res) => {
       onChange(todo.listId);
     });
   };
 
   const updateTodo = (todo) => {
-    axios
-      .put(`http://localhost:8080/api/v1/todo/${todo.id}`, todo)
-      .then((res) => console.log(res));
+    axios.put(`/api/v1/todo/${todo.id}`, todo).then((res) => console.log(res));
   };
 
   useEffect(() => {
