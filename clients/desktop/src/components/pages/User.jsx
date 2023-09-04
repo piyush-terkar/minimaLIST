@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosConfig";
 import { HeaderMenu } from "../partials/HeaderMenu";
-import { IconArrowLeft } from "@tabler/icons-react";
+import { IconAlertTriangleFilled, IconArrowLeft } from "@tabler/icons-react";
 import { IconLogout2 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
@@ -24,6 +24,7 @@ import { notifications } from "@mantine/notifications";
 import { IconHandStop } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { FooterPlain } from "../partials/FooterPlain";
+import { modals } from "@mantine/modals";
 
 export function User() {
   const navigate = useNavigate();
@@ -40,11 +41,37 @@ export function User() {
       navigate("/login");
     });
   };
+
+  const deleteAccount = (userId) => {
+    axiosInstance.delete(`/api/v1/user/${userId}`).then((resonse) => {
+      logout();
+    });
+  };
+
   useEffect(() => {
     axiosInstance.get("/api/v1/user").then((response) => {
       setUser({ ...response.data });
     });
   }, []);
+
+  const deleteModal = (userId) => {
+    modals.openConfirmModal({
+      title: "Delete your profile",
+      centered: true,
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete your profile? This action is
+          destructive and you will have to contact support to restore your data.
+        </Text>
+      ),
+      labels: { confirm: "Delete account", cancel: "No don't delete it" },
+      confirmProps: { color: "red" },
+      onCancel: () => {},
+      onConfirm: () => {
+        deleteAccount(userId);
+      },
+    });
+  };
 
   const handleSubmit = () => {};
 
@@ -105,7 +132,14 @@ export function User() {
                 >
                   Logout
                 </Button>
-                <Button variant={"outline"} mt="md" color={"red"}>
+                <Button
+                  variant={"outline"}
+                  mt="md"
+                  color={"red"}
+                  onClick={() => {
+                    deleteModal(user.id);
+                  }}
+                >
                   Delete Account
                 </Button>
               </SimpleGrid>

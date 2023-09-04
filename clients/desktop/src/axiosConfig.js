@@ -20,7 +20,7 @@ axiosInstance.interceptors.response.use(
     }
     notifications.show({
       title: "Something went wrong!",
-      message: error.data.error,
+      message: error.data?.error,
       color: "red",
       icon: <IconX />,
     });

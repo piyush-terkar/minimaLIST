@@ -12,6 +12,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./Authentication/ProtectedRoute";
 import { Notifications } from "@mantine/notifications";
 import { User } from "./components/pages/User";
+import { ModalsProvider } from "@mantine/modals";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -27,22 +28,24 @@ function App() {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Notifications />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<Authentication />} />
+        <ModalsProvider>
+          <Notifications />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Authentication />} />
 
-            <Route
-              path="/todolist"
-              element={
-                <ProtectedRoute>
-                  <Shell />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/user" element={<User />} />
-          </Routes>
-        </BrowserRouter>
+              <Route
+                path="/todolist"
+                element={
+                  <ProtectedRoute>
+                    <Shell />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/user" element={<User />} />
+            </Routes>
+          </BrowserRouter>
+        </ModalsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
