@@ -23,7 +23,7 @@ import {
 import { useEffect, useState } from "react";
 import { Form } from "@mantine/form";
 import EmojiPicker, { Emoji, EmojiStyle } from "emoji-picker-react";
-import axios from "axios";
+import axios from "../../axiosConfig";
 import { hover } from "@testing-library/user-event/dist/hover";
 
 const useStyles = createStyles((theme) => ({
@@ -175,6 +175,7 @@ export function DndListHandle({ data, onChange, setList, currList }) {
                         emoji: item.emoji,
                         index: item.index,
                         title: e.target.value,
+                        userId: item.userId,
                         createdDate: item.createdDate,
                         lastModifiedDate: item.lastModifiedDate,
                       })
@@ -203,6 +204,7 @@ export function DndListHandle({ data, onChange, setList, currList }) {
                   emoji: emoji,
                   index: item.index,
                   title: item.title,
+                  userId: item.userId,
                   createdDate: item.createdDate,
                   lastModifiedDate: item.lastModifiedDate,
                 });

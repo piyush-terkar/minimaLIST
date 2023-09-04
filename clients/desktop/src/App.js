@@ -8,6 +8,8 @@ import {
 } from "@mantine/core";
 import { Shell } from "./components/partials/AppShell";
 import { Authentication } from "./components/pages/Authentication";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ProtectedRoute } from "./Authentication/ProtectedRoute";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -23,8 +25,20 @@ function App() {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Shell />
-        {/* <Authentication /> */}
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Authentication />} />
+
+            <Route
+              path="/todolist"
+              element={
+                <ProtectedRoute>
+                  <Shell />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </MantineProvider>
     </ColorSchemeProvider>
   );

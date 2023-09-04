@@ -14,6 +14,7 @@ import {
   ScrollArea,
   Autocomplete,
   Avatar,
+  Skeleton,
 } from "@mantine/core";
 import {
   IconBulb,
@@ -26,9 +27,11 @@ import {
 import { UserButton } from "../buttons/UserButton";
 import { DndListHandle } from "../DragNDrops/DndListHandle";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import axios from "../../axiosConfig";
 import NewListCreator from "../creators/NewListCreator";
 import { useFocusTrap, useHotkeys } from "@mantine/hooks";
+import secureLocalStorage from "react-secure-storage";
+import { useNavigate } from "react-router-dom";
 const useStyles = createStyles((theme) => ({
   navbar: {
     paddingTop: 0,
@@ -146,20 +149,37 @@ const useStyles = createStyles((theme) => ({
 
 export function NavbarSearch({ opened, setList, selectedlist }) {
   const { classes } = useStyles();
-
+  const navigate = useNavigate();
   const [lists, setLists] = useState(undefined);
   const [data, setData] = useState([]);
+  const [user, setUser] = useState(undefined);
   const focusSearch = useRef(null);
 
   useHotkeys([["ctrl+K", () => focusSearch.current.focus()]]);
 
+  const getUser = () => {
+    axios
+      .get("/api/v1/user")
+      .then((response) => {
+        setUser({ ...response.data });
+      })
+      .catch((err) => {
+        secureLocalStorage.clear();
+        navigate();
+      });
+  };
+
   const getLists = () => {
+    const userId = JSON.parse(secureLocalStorage.getItem("user"));
     setLists(undefined);
-    axios.get("http://localhost:8080/api/v1/list").then((response) => {
-      console.log(response);
-      setLists(response.data);
-      setData(response.data.map((item) => ({ value: item.title })));
-    });
+    axios
+      .get(`/api/v1/list/${userId}`, { withCredentials: true })
+      .then((response) => {
+        if (response.data.length) {
+          setLists(response.data);
+          setData(response.data.map((item) => ({ value: item.title })));
+        }
+      });
   };
 
   const searchHandler = (value) => {
@@ -169,6 +189,7 @@ export function NavbarSearch({ opened, setList, selectedlist }) {
   };
 
   useEffect(() => {
+    getUser();
     getLists();
   }, []);
 
@@ -202,6 +223,7 @@ export function NavbarSearch({ opened, setList, selectedlist }) {
         {lists ? (
           <>
             <NewListCreator onChange={getLists} />
+
             <DndListHandle
               data={lists}
               onChange={() => {
@@ -216,11 +238,13 @@ export function NavbarSearch({ opened, setList, selectedlist }) {
         )}
       </Navbar.Section>
       <Navbar.Section className={classes.section}>
-        <UserButton
-          name="Bob Rulebreaker"
-          email="Product owner"
-          icon={<IconSelector size="0.9rem" stroke={1.5} />}
-        />
+        {user ? (
+          <UserButton
+            name={user.username}
+            email={user.email}
+            icon={<IconSelector size="0.9rem" stroke={1.5} />}
+          />
+        ) : null}
       </Navbar.Section>
     </Navbar>
   );

@@ -13,7 +13,8 @@ import {
 } from "@mantine/core";
 import EmojiPicker, { Emoji, EmojiStyle } from "emoji-picker-react";
 import { IconPlus, IconX, IconMoodSmile } from "@tabler/icons-react";
-import axios from "axios";
+import axios from "../../axiosConfig";
+import secureLocalStorage from "react-secure-storage";
 const useStyles = createStyles((theme) => ({
   item: {
     display: "flex",
@@ -30,15 +31,20 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 export default function NewListCreator({ onChange }) {
+  const userId = JSON.parse(secureLocalStorage.getItem("user"));
   const { classes, cx } = useStyles();
   const [showForm, setShowForm] = useState(false);
   const [formEmoji, setFormEmoji] = useState("");
   const [emoji, setEmoji] = useState("");
-  const [newList, setNewList] = useState({ title: "", emoji: emoji });
+  const [newList, setNewList] = useState({
+    title: "",
+    emoji: emoji,
+    userId: userId,
+  });
 
   const createList = () => {
     axios
-      .post("http://localhost:8080/api/v1/list", { ...newList, emoji: emoji })
+      .post("/api/v1/list", { ...newList, emoji: emoji })
       .then((response) => {
         setEmoji("");
         setNewList({ ...newList, title: "" });
