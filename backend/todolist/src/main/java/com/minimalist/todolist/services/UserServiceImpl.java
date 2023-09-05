@@ -8,6 +8,7 @@ import com.minimalist.todolist.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -20,11 +21,21 @@ public class UserServiceImpl implements UserService {
     private final TodoRepository todoRepository;
     
     @Override
+    public Mono<UserDTO> changePassword(String userId, String newPassword) {
+        return userRepository.findById(userId)
+                .map(foundUser->{
+                    foundUser.setPassword(newPassword);
+                    return foundUser;}
+                ).flatMap(userRepository::save)
+                .map(userMapper::userToUserDTO);
+    }
+    
+    @Override
     public Mono<UserDTO> update(String userId, UserDTO userDTO) {
         return userRepository.findById(userId)
                 .map(foundUser-> {
                     foundUser.setEmail(userDTO.getEmail());
-                    foundUser.setPassword(userDTO.getPassword());
+                    foundUser.setUsername(userDTO.getUsername());
                     return foundUser;
                 })
                 .flatMap(userRepository::save)
