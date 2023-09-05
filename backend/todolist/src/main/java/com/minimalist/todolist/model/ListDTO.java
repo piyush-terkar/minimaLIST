@@ -1,11 +1,16 @@
 package com.minimalist.todolist.model;
 
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.Version;
+import org.springframework.security.core.userdetails.User;
 
 import java.time.LocalDateTime;
 
@@ -31,4 +36,7 @@ public class ListDTO {
     
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
+    private User createdBy;
+    private User modifiedBy;
+    private Integer version;
 }

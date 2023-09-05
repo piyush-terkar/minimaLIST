@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
 
@@ -24,4 +25,5 @@ public class UserDTO {
     
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
+    private Integer version;
 }

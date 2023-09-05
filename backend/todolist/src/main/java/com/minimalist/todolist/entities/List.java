@@ -1,11 +1,9 @@
 package com.minimalist.todolist.entities;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import org.springframework.security.core.userdetails.User;
 import java.time.LocalDateTime;
 
 @Data
@@ -27,4 +25,13 @@ public class List {
     private LocalDateTime createdDate;
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+    
+    @Version
+    private Integer version;
+    
+    @CreatedBy
+    private User createdBy;
+    
+    @LastModifiedBy
+    private User modifiedBy;
 }
