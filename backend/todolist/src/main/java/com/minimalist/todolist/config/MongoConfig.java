@@ -20,7 +20,7 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration {
         return "minimalist";
     }
     @Bean
-    public ReactiveAuditorAware<User> myAuditorProvider() {
+    public ReactiveAuditorAware<String> myAuditorProvider() {
         return new SpringSecurityAuditorAware();
     }
 }

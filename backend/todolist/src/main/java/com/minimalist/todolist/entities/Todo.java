@@ -34,8 +34,8 @@ public class Todo {
     @Version
     private Integer version;
     @CreatedBy
-    private User createdBy;
+    private String createdBy;
     @LastModifiedBy
-    private User modifiedBy;
+    private String modifiedBy;
     
 }

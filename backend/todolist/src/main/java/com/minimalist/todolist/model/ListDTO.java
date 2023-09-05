@@ -36,7 +36,7 @@ public class ListDTO {
     
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
-    private User createdBy;
-    private User modifiedBy;
+    private String createdBy;
+    private String modifiedBy;
     private Integer version;
 }

@@ -21,7 +21,10 @@ public class ListServiceImpl implements ListService {
     @Override
     public Flux<ListDTO> getAllLists(String userId) {
         return listRepository.findAllByUserIdOrderByIndexAsc(userId)
-                .map(listMapper::listToListDTO);
+                .map(list -> {
+                    System.out.println(list);
+                    return listMapper.listToListDTO(list);
+                });
     }
     
     @Override

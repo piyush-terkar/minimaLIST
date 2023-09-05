@@ -10,14 +10,22 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-public class SpringSecurityAuditorAware implements ReactiveAuditorAware<User> {
+public class SpringSecurityAuditorAware implements ReactiveAuditorAware<String> {
     @Override
-    public Mono<User> getCurrentAuditor() {
+    public Mono<String> getCurrentAuditor() {
         
         return ReactiveSecurityContextHolder.getContext()
                 .map(SecurityContext::getAuthentication)
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getPrincipal)
-                .map(User.class::cast);
+                .map(principal -> {
+                    if (principal instanceof User) {
+                        return ((User) principal).getUsername(); // Assuming User has getId() method.
+                    } else if (principal instanceof String) {
+                        return (String) principal; // Already a user ID
+                    } else {
+                        throw new IllegalStateException("Unexpected principal type: " + principal.getClass());
+                    }
+                });
     }
 }
