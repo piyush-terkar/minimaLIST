@@ -139,8 +139,8 @@ export function User() {
                 radius={120}
                 mx="auto"
                 m={"lg"}
-                color={"yellow"}
-                variant={"filled"}
+                variant={"gradient"}
+                gradient={{ from: "teal", to: "cyan" }}
               >
                 {user.username[0]}
               </Avatar>

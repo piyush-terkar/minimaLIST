@@ -13,6 +13,7 @@ import { ProtectedRoute } from "./Authentication/ProtectedRoute";
 import { Notifications } from "@mantine/notifications";
 import { User } from "./components/pages/User";
 import { ModalsProvider } from "@mantine/modals";
+import Home from "./components/pages/Home";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -24,7 +25,7 @@ function App() {
       toggleColorScheme={toggleColorScheme}
     >
       <MantineProvider
-        theme={{ colorScheme }}
+        theme={{ colorScheme, primaryColor: "teal" }}
         withGlobalStyles
         withNormalizeCSS
       >
@@ -33,7 +34,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Authentication />} />
-
+              <Route path="/" element={<Home />} />
               <Route
                 path="/todolist"
                 element={

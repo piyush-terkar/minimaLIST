@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import ThemeToggler from "../themes/ThemeToggler";
+import { useNavigate } from "react-router-dom";
 const useStyles = createStyles((theme) => ({
   header: {
     backgroundColor: theme.fn.variant({
@@ -64,6 +65,7 @@ const useStyles = createStyles((theme) => ({
 export function HeaderMenu({ theme, setOpened }) {
   const [opened, { toggle }] = useDisclosure(false);
   const { classes } = useStyles();
+  const navigate = useNavigate();
 
   return (
     <Header height={{ base: 50, md: 70 }} p="md">
@@ -78,7 +80,16 @@ export function HeaderMenu({ theme, setOpened }) {
               mr="xl"
             />
           </MediaQuery>
-          <Title p={5}>Minimalist</Title>
+          <Title
+            p={5}
+            onClick={() => {
+              navigate("/");
+            }}
+            variant="gradient"
+            gradient={{ from: "teal", to: "green" }}
+          >
+            Minimalist
+          </Title>
         </div>
         <ThemeToggler />
       </Flex>

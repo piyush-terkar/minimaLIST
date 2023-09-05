@@ -5,6 +5,7 @@ import { TodoHeroHeader } from "./TodoHeroHeader";
 import axios from "../../axiosConfig";
 import { useEffect, useState } from "react";
 import NewTodoCreator from "../creators/NewTodoCreator";
+import { FAQSection } from "./FAQSection";
 
 export function TodoRenderer({ selectedList }) {
   const [list, setList] = useState(selectedList);

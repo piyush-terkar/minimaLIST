@@ -16,6 +16,7 @@ import { HeaderMenu } from "./HeaderMenu";
 import { DndTodoHandle } from "../DragNDrops/DndTodoHandle";
 import { TodoRenderer } from "./TodoRender";
 import { FooterPlain } from "./FooterPlain";
+import { FAQSection } from "./FAQSection";
 
 export function Shell() {
   const theme = useMantineTheme();
@@ -43,7 +44,11 @@ export function Shell() {
       footer={<FooterPlain />}
       header={<HeaderMenu theme={theme} setOpened={setOpened} />}
     >
-      {selectedList ? <TodoRenderer selectedList={selectedList} /> : null}
+      {selectedList ? (
+        <TodoRenderer selectedList={selectedList} />
+      ) : (
+        <FAQSection />
+      )}
     </AppShell>
   );
 }

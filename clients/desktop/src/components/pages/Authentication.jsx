@@ -29,7 +29,7 @@ const useStyles = createStyles((theme) => ({
     minHeight: rem(500),
     backgroundSize: "cover",
     backgroundImage:
-      "url(https://images.unsplash.com/photo-1449247709967-d4461a6a6103?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80)",
+      "url(https://images.unsplash.com/photo-1569171181682-2c689e08141d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGV)",
   },
 }));
 export function Authentication(props) {
@@ -80,7 +80,25 @@ export function Authentication(props) {
         .post("/api/auth/register", values, {
           withCredentials: true,
         })
-        .then((res) => console.log(res));
+        .then((res) => {
+          axios
+            .post(
+              "/api/auth/login",
+              {
+                username: values.email,
+                password: values.password,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+              }
+            )
+            .then((res) => {
+              secureLocalStorage.setItem("user", JSON.stringify(res.data.id));
+              navigate("/todolist");
+            });
+        });
     }
   };
 

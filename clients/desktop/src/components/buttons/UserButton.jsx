@@ -58,7 +58,7 @@ export function UserButton({ name, email, icon, ...others }) {
           navigate("/user");
         }}
       >
-        <Avatar radius="xl" color={"blue"}>
+        <Avatar radius="xl" color={"teal"}>
           {name[0]}
         </Avatar>
 
