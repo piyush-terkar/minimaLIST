@@ -24,7 +24,6 @@ public class UserController {
     
     @PutMapping(USER_PATH_ID)
     public Mono<UserDTO> update(@PathVariable("userId") String userId, @RequestBody UserDTO userDTO){
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return userService.update(userId, userDTO);
     }
     
