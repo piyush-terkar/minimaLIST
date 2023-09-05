@@ -25,10 +25,17 @@ import { IconHandStop } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { FooterPlain } from "../partials/FooterPlain";
 import { modals } from "@mantine/modals";
+import { IconCircleCheckFilled } from "@tabler/icons-react";
 
 export function User() {
   const navigate = useNavigate();
   const [user, setUser] = useState();
+  const [detailForm, setDetailForm] = useState({ username: "", email: "" });
+  const [isMatch, setIsMatch] = useState(true);
+  const [passwordForm, setPasswordForm] = useState({
+    newPass: "",
+    confirmPass: "",
+  });
   const theme = useMantineTheme();
   const logout = () => {
     axiosInstance.post("api/auth/logout").then((response) => {
@@ -42,17 +49,41 @@ export function User() {
     });
   };
 
+  const passwordChange = (userId) => {
+    if (isMatch) {
+      axiosInstance
+        .patch(`/api/v1/user/${userId}`, passwordForm, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          notifications.show({
+            title: "Password Changed Successfully Logging out",
+            color: "green",
+            icon: <IconCircleCheckFilled />,
+          });
+          logout();
+        });
+    }
+  };
+
   const deleteAccount = (userId) => {
     axiosInstance.delete(`/api/v1/user/${userId}`).then((resonse) => {
       logout();
     });
   };
-
-  useEffect(() => {
+  const getUser = () => {
+    setUser(undefined);
     axiosInstance.get("/api/v1/user").then((response) => {
       setUser({ ...response.data });
     });
+  };
+  useEffect(() => {
+    getUser();
   }, []);
+
+  useEffect(() => {
+    setIsMatch(passwordForm.newPass === passwordForm.confirmPass);
+  }, [passwordForm]);
 
   const deleteModal = (userId) => {
     modals.openConfirmModal({
@@ -73,12 +104,20 @@ export function User() {
     });
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (detailForm.email !== "" && detailForm.username !== "") {
+      axiosInstance
+        .put(`/api/v1/user/${user.id}`, detailForm)
+        .then((response) => {
+          getUser();
+        });
+    }
+  };
 
   return (
     <>
       <HeaderMenu theme={theme} />
-      {user ? (
+      {user !== undefined ? (
         <>
           <Container mt={"xl"}>
             <Paper
@@ -153,10 +192,21 @@ export function User() {
               Use this Section to edit your basic details!
             </Text>
             <Paper>
-              <form>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+              >
                 <Stack>
                   <TextInput
                     defaultValue={user.username}
+                    onChange={(e) => {
+                      setDetailForm({
+                        ...detailForm,
+                        username: e.target.value,
+                      });
+                    }}
                     withAsterisk
                     label="Name"
                     placeholder="Your name"
@@ -165,13 +215,22 @@ export function User() {
 
                   <TextInput
                     defaultValue={user.email}
+                    onChange={(e) => {
+                      setDetailForm({ ...detailForm, email: e.target.value });
+                    }}
                     required
                     label="Email"
                     placeholder="hello@mantine.dev"
                     radius="md"
                   />
                 </Stack>
-                <Button fullWidth my={"md"} variant={"light"} color={"green"}>
+                <Button
+                  onClick={() => handleSubmit()}
+                  fullWidth
+                  my={"md"}
+                  variant={"light"}
+                  color={"green"}
+                >
                   Save Changes
                 </Button>
               </form>
@@ -186,16 +245,49 @@ export function User() {
                     withAsterisk
                     label="New Password"
                     radius="md"
+                    value={passwordForm.newPass}
+                    onChange={(e) => {
+                      setPasswordForm({
+                        ...passwordForm,
+                        newPass: e.target.value,
+                      });
+                    }}
                   />
+                  {isMatch ? null : (
+                    <Text c={"red"}>Passwords Do not match</Text>
+                  )}
 
                   <PasswordInput
+                    value={passwordForm.confirmPass}
+                    onChange={(e) => {
+                      setPasswordForm({
+                        ...passwordForm,
+                        confirmPass: e.target.value,
+                      });
+                    }}
                     withAsterisk
                     required
                     label="Confirm Password"
                     radius="md"
                   />
+                  {isMatch ? null : (
+                    <Text c={"red"}>Passwords Do not match</Text>
+                  )}
                 </Stack>
-                <Button fullWidth my={"md"} variant={"outline"} color={"blue"}>
+                <Button
+                  fullWidth
+                  my={"md"}
+                  variant={"outline"}
+                  color={"blue"}
+                  onClick={() => {
+                    passwordChange(user.id);
+                  }}
+                  disabled={
+                    !isMatch ||
+                    passwordForm.newPass === "" ||
+                    passwordForm.confirmPass === ""
+                  }
+                >
                   Change Password
                 </Button>
               </form>

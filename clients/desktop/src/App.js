@@ -42,7 +42,14 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/user" element={<User />} />
+              <Route
+                path="/user"
+                element={
+                  <ProtectedRoute>
+                    <User />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </BrowserRouter>
         </ModalsProvider>
