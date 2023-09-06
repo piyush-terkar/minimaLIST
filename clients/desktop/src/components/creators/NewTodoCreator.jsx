@@ -1,22 +1,14 @@
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 import {
-  Flex,
   ActionIcon,
   Paper,
   createStyles,
   rem,
   Text,
-  Kbd,
   Button,
 } from "@mantine/core";
-import {
-  IconX,
-  IconCheck,
-  IconPlus,
-  IconGripVertical,
-} from "@tabler/icons-react";
+import { IconX, IconPlus, IconGripVertical } from "@tabler/icons-react";
 import { RTE } from "../TextEditors/RTE";
-import { useDebouncedValue } from "@mantine/hooks";
 import axios from "../../axiosConfig";
 
 const useStyles = createStyles((theme) => ({

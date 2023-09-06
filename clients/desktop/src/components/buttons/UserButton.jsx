@@ -1,6 +1,5 @@
 import {
   UnstyledButton,
-  UnstyledButtonProps,
   Group,
   Avatar,
   Text,
@@ -8,16 +7,10 @@ import {
   ActionIcon,
   Tooltip,
 } from "@mantine/core";
-import {
-  IconChevronRight,
-  IconHandStop,
-  IconLogout,
-  IconLogout2,
-} from "@tabler/icons-react";
+import { IconHandStop, IconLogout2 } from "@tabler/icons-react";
 import axiosInstance from "../../axiosConfig";
 import secureLocalStorage from "react-secure-storage";
 import { notifications } from "@mantine/notifications";
-import { IconHandMove } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({

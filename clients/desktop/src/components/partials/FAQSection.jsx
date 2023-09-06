@@ -82,9 +82,6 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const placeholder =
-  "It can’t help but hear a pin drop from over half a mile away, so it lives deep in the mountains where there aren’t many people or Pokémon.It was born from sludge on the ocean floor. In a sterile environment, the germs within its body can’t multiply, and it dies.It has no eyeballs, so it can’t see. It checks its surroundings via the ultrasonic waves it emits from its mouth.";
-
 export function FAQSection() {
   const { classes } = useStyles();
   return (
@@ -97,7 +94,7 @@ export function FAQSection() {
 
           <Accordion
             chevronPosition="right"
-            defaultValue="reset-password"
+            defaultValue="create a list"
             chevronSize={50}
             variant="separated"
             disableChevronRotation
@@ -107,39 +104,94 @@ export function FAQSection() {
               </ThemeIcon>
             }
           >
-            <Accordion.Item className={classes.item} value="reset-password">
-              <Accordion.Control>
-                How can I reset my password?
-              </Accordion.Control>
-              <Accordion.Panel>{placeholder}</Accordion.Panel>
+            <Accordion.Item className={classes.item} value="create a list">
+              <Accordion.Control>How To Create A List?</Accordion.Control>
+              <Accordion.Panel>
+                <iframe
+                  src="https://scribehow.com/embed/Workflow__CPO9lsELSR-EOkpshYvkNA"
+                  width="100%"
+                  height="640"
+                  allowfullscreen
+                  frameborder="0"
+                ></iframe>
+              </Accordion.Panel>
             </Accordion.Item>
 
-            <Accordion.Item className={classes.item} value="another-account">
+            <Accordion.Item
+              className={classes.item}
+              value="edit or delete list"
+            >
               <Accordion.Control>
-                Can I create more that one account?
+                How To Edit or Delete a list?
               </Accordion.Control>
-              <Accordion.Panel>{placeholder}</Accordion.Panel>
+              <Accordion.Panel>
+                <iframe
+                  src="https://scribehow.com/embed/How_to_Update_or_Delete_a_Todo_List__mpFyDBCTTXC640E_C6jvvA"
+                  width="100%"
+                  height="640"
+                  allowfullscreen
+                  frameborder="0"
+                ></iframe>
+              </Accordion.Panel>
             </Accordion.Item>
 
-            <Accordion.Item className={classes.item} value="newsletter">
-              <Accordion.Control>
-                How can I subscribe to monthly newsletter?
-              </Accordion.Control>
-              <Accordion.Panel>{placeholder}</Accordion.Panel>
+            <Accordion.Item className={classes.item} value="create todo">
+              <Accordion.Control>How to Add a new To-Do?</Accordion.Control>
+              <Accordion.Panel>
+                <iframe
+                  src="https://scribehow.com/embed/Creating_a_Rich_Text_To-Do_In_a_List__6kuMslcwR0C7IVi0M48gDA"
+                  width="100%"
+                  height="640"
+                  allowfullscreen
+                  frameborder="0"
+                ></iframe>
+              </Accordion.Panel>
             </Accordion.Item>
 
-            <Accordion.Item className={classes.item} value="credit-card">
+            <Accordion.Item
+              className={classes.item}
+              value="edit or delete a todo"
+            >
               <Accordion.Control>
-                Do you store credit card information securely?
+                How to Edit an existing To-Do?
               </Accordion.Control>
-              <Accordion.Panel>{placeholder}</Accordion.Panel>
+              <Accordion.Panel>
+                <iframe
+                  src="https://scribehow.com/embed/How_to_Mark_As_Done_or_Update_or_Delete_To-do_List_Items__BKt7pBajRNGf9U8spSgAgg"
+                  width="100%"
+                  height="640"
+                  allowfullscreen
+                  frameborder="0"
+                ></iframe>
+              </Accordion.Panel>
             </Accordion.Item>
 
-            <Accordion.Item className={classes.item} value="payment">
+            <Accordion.Item className={classes.item} value="use searchbar">
+              <Accordion.Control>How To Use SearchBar?</Accordion.Control>
+              <Accordion.Panel>
+                <iframe
+                  src="https://scribehow.com/embed/How_to_Search_for_a_List_using_Search_Bar__J2ie6aGATGKlMquehFyspg"
+                  width="100%"
+                  height="640"
+                  allowfullscreen
+                  frameborder="0"
+                ></iframe>
+              </Accordion.Panel>
+            </Accordion.Item>
+
+            <Accordion.Item className={classes.item} value="edit account">
               <Accordion.Control>
-                What payment systems to you work with?
+                How to Edit Account Details and Password
               </Accordion.Control>
-              <Accordion.Panel>{placeholder}</Accordion.Panel>
+              <Accordion.Panel>
+                <iframe
+                  src="https://scribehow.com/embed/Guide_Changing_User_Details__iZOHfwYwSFWNhPczhGW74g"
+                  width="100%"
+                  height="640"
+                  allowfullscreen
+                  frameborder="0"
+                ></iframe>
+              </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
         </Container>

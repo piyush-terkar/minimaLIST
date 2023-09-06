@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 
 export function ProtectedRoute(props) {
