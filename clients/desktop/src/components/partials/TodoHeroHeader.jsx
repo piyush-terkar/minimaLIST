@@ -6,6 +6,7 @@ import {
   Button,
   Text,
   rem,
+  Tooltip,
 } from "@mantine/core";
 import { Emoji } from "emoji-picker-react";
 
@@ -70,22 +71,32 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function TodoHeroHeader({ emoji, title }) {
+export function TodoHeroHeader({ emoji, title, list }) {
   const { classes } = useStyles();
 
   return (
-    <div className={classes.hero}>
-      <Overlay
-        gradient="linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%,  40%)"
-        opacity={1}
-        zIndex={0}
-      />
-      <Container className={classes.container}>
-        <Title className={classes.title}>
-          <Emoji unified={emoji} size={100} />
-          {title}
-        </Title>
-      </Container>
-    </div>
+    <Tooltip
+      multiline
+      label={`CreatedBy: ${list.createdBy}@${new Date(
+        list.createdDate
+      ).toLocaleString()}\n
+    Modified By: ${list.modifiedBy}@${new Date(
+        list.lastModifiedDate
+      ).toLocaleString()}`}
+    >
+      <div className={classes.hero}>
+        <Overlay
+          gradient="linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%,  40%)"
+          opacity={1}
+          zIndex={0}
+        />
+        <Container className={classes.container}>
+          <Title className={classes.title}>
+            <Emoji unified={emoji} size={100} />
+            {title}
+          </Title>
+        </Container>
+      </div>
+    </Tooltip>
   );
 }

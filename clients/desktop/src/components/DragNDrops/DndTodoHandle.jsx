@@ -1,4 +1,11 @@
-import { Checkbox, createStyles, rem, ActionIcon, Paper } from "@mantine/core";
+import {
+  Checkbox,
+  createStyles,
+  rem,
+  ActionIcon,
+  Paper,
+  Tooltip,
+} from "@mantine/core";
 import { useDebouncedValue, useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
@@ -71,7 +78,7 @@ export function DndTodoHandle({ data, onChange }) {
   };
 
   const updateTodo = (todo) => {
-    axios.put(`/api/v1/todo/${todo.id}`, todo).then((res) => console.log(res));
+    axios.put(`/api/v1/todo/${todo.id}`, todo).then((res) => {});
   };
 
   useEffect(() => {
@@ -85,33 +92,42 @@ export function DndTodoHandle({ data, onChange }) {
   const items = state.map((item, index) => (
     <Draggable index={item.index} draggableId={item.id} key={item.id}>
       {(provided, snapshot) => (
-        <div
-          className={cx(classes.item, {
-            [classes.itemDragging]: snapshot.isDragging,
-          })}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
+        <Tooltip
+          multiline
+          label={`Created By: ${item.createdBy}@${new Date(
+            item.createdDate
+          ).toLocaleString()}\n Modified By: ${item.modifiedBy}@${new Date(
+            item.lastModifiedDate
+          ).toLocaleString()}`}
         >
-          <div {...provided.dragHandleProps} className={classes.dragHandle}>
-            <IconGripVertical size="1.05rem" stroke={1.5} />
+          <div
+            className={cx(classes.item, {
+              [classes.itemDragging]: snapshot.isDragging,
+            })}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+          >
+            <div {...provided.dragHandleProps} className={classes.dragHandle}>
+              <IconGripVertical size="1.05rem" stroke={1.5} />
+            </div>
+
+            <Checkbox
+              m={"sm"}
+              name={index}
+              defaultChecked={item.isChecked}
+              onChange={(e) =>
+                updateTodo({ ...item, isChecked: e.currentTarget.checked })
+              }
+            />
+            <Paper onClick={(e) => setCurrTodo({ ...item })}>
+              <RTE content={item.content} onChange={setCurrEdit} />
+            </Paper>
+
+            <ActionIcon m={"sm"} color="red" onClick={() => deleteTodo(item)}>
+              <IconTrash size="1.125rem" />
+            </ActionIcon>
           </div>
-
-          <Checkbox
-            m={"sm"}
-            name={index}
-            defaultChecked={item.isChecked}
-            onChange={(e) =>
-              updateTodo({ ...item, isChecked: e.currentTarget.checked })
-            }
-          />
-          <Paper onClick={(e) => setCurrTodo({ ...item })}>
-            <RTE content={item.content} onChange={setCurrEdit} />
-          </Paper>
-
-          <ActionIcon m={"sm"} color="red" onClick={() => deleteTodo(item)}>
-            <IconTrash size="1.125rem" />
-          </ActionIcon>
-        </div>
+        </Tooltip>
       )}
     </Draggable>
   ));

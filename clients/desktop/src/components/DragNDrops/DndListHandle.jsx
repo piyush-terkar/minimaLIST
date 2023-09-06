@@ -10,6 +10,7 @@ import {
   Button,
   Container,
   Kbd,
+  Tooltip,
 } from "@mantine/core";
 import { useListState, useDebouncedValue } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -126,75 +127,84 @@ export function DndListHandle({ data, onChange, setList, currList }) {
     <Draggable index={item.index} draggableId={item.id} key={item.id}>
       {(provided, snapshot) => (
         <>
-          <div
-            className={cx(classes.item, {
-              [classes.itemDragging]: snapshot.isDragging,
-            })}
-            ref={provided.innerRef}
-            onClick={() => setList(item)}
-            {...provided.draggableProps}
+          <Tooltip
+            multiline
+            label={`Created By: ${item.createdBy}@${new Date(
+              item.createdDate
+            ).toLocaleDateString()}\nLast Modified By: ${
+              item.modifiedBy
+            }@${new Date(item.lastModifiedDate).toLocaleString()}`}
           >
-            <div {...provided.dragHandleProps} className={classes.dragHandle}>
-              <IconGripVertical size="1.05rem" stroke={1.5} />
-            </div>
-            <ActionIcon m={"sm"} onDoubleClick={() => setFormEmoji(item.id)}>
-              <Emoji
-                unified={item.emoji}
-                emojiStyle={EmojiStyle.APPLE}
-                size={40}
-              />
-            </ActionIcon>
+            <div
+              className={cx(classes.item, {
+                [classes.itemDragging]: snapshot.isDragging,
+              })}
+              ref={provided.innerRef}
+              onClick={() => setList(item)}
+              {...provided.draggableProps}
+            >
+              <div {...provided.dragHandleProps} className={classes.dragHandle}>
+                <IconGripVertical size="1.05rem" stroke={1.5} />
+              </div>
+              <ActionIcon m={"sm"} onDoubleClick={() => setFormEmoji(item.id)}>
+                <Emoji
+                  unified={item.emoji}
+                  emojiStyle={EmojiStyle.APPLE}
+                  size={40}
+                />
+              </ActionIcon>
 
-            <div>
-              <Text
-                m={"sm"}
-                display={edit == item.id ? "none" : ""}
-                onDoubleClick={() => {
-                  setEdit(item.id);
-                }}
-              >
-                {item.title}
-              </Text>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  console.log(e.target.value);
-                  setEdit("");
-                }}
-              >
-                <Flex>
-                  <TextInput
-                    name={item.id}
-                    defaultValue={item.title}
-                    display={edit == item.id ? "" : "none"}
-                    m={"sm"}
-                    variant={"unstyled"}
-                    onChange={(e) =>
-                      setCurrEdit({
-                        id: item.id,
-                        emoji: item.emoji,
-                        index: item.index,
-                        title: e.target.value,
-                        userId: item.userId,
-                        createdDate: item.createdDate,
-                        lastModifiedDate: item.lastModifiedDate,
-                      })
-                    }
-                  />
-                  <ActionIcon
-                    m={"sm"}
-                    color="red"
-                    display={edit == item.id ? "" : "none"}
-                    onClick={() => {
-                      listDelete(item.id);
-                    }}
-                  >
-                    <IconTrash size="1.125rem" />
-                  </ActionIcon>
-                </Flex>
-              </form>
+              <div>
+                <Text
+                  m={"sm"}
+                  display={edit == item.id ? "none" : ""}
+                  onDoubleClick={() => {
+                    setEdit(item.id);
+                  }}
+                >
+                  {item.title}
+                </Text>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    console.log(e.target.value);
+                    setEdit("");
+                  }}
+                >
+                  <Flex>
+                    <TextInput
+                      name={item.id}
+                      defaultValue={item.title}
+                      display={edit == item.id ? "" : "none"}
+                      m={"sm"}
+                      variant={"unstyled"}
+                      onChange={(e) =>
+                        setCurrEdit({
+                          id: item.id,
+                          emoji: item.emoji,
+                          index: item.index,
+                          title: e.target.value,
+                          userId: item.userId,
+                          createdDate: item.createdDate,
+                          lastModifiedDate: item.lastModifiedDate,
+                        })
+                      }
+                    />
+                    <ActionIcon
+                      m={"sm"}
+                      color="red"
+                      display={edit == item.id ? "" : "none"}
+                      onClick={() => {
+                        listDelete(item.id);
+                      }}
+                    >
+                      <IconTrash size="1.125rem" />
+                    </ActionIcon>
+                  </Flex>
+                </form>
+              </div>
             </div>
-          </div>
+          </Tooltip>
           <Paper display={formEmoji == item.id ? "" : "none"}>
             <EmojiPicker
               onEmojiClick={(emojiData, event) => {

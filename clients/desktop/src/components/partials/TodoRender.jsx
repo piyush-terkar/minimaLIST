@@ -23,7 +23,9 @@ export function TodoRenderer({ selectedList }) {
   }, [selectedList, list]);
   return (
     <>
-      {list ? <TodoHeroHeader title={list.title} emoji={list.emoji} /> : null}
+      {list ? (
+        <TodoHeroHeader title={list.title} emoji={list.emoji} list={list} />
+      ) : null}
       <Paper shadow="xl" radius="xs" p="xs">
         {todos ? (
           <>
